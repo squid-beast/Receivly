@@ -69,7 +69,9 @@ export function Navbar() {
                 Sign in
               </Button>
             </Link>
-            <Button size="sm">Start Free</Button>
+            <Link to="/signup">
+              <Button size="sm">Start Free</Button>
+            </Link>
           </div>
 
           <button
@@ -124,7 +126,9 @@ export function Navbar() {
                     Sign in
                   </Button>
                 </Link>
-                <Button className="min-h-[48px] w-full justify-center">Start Free</Button>
+                <Link to="/signup" className="w-full" onClick={() => setMobileOpen(false)}>
+                  <Button className="min-h-[48px] w-full justify-center">Start Free</Button>
+                </Link>
               </div>
             </Container>
           </motion.div>
