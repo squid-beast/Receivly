@@ -2,7 +2,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { KeywordHighlight } from "@/components/ui/keyword-highlight";
-import { SECTION_PADDING, CONTENT_MAX_W } from "@/components/landing/landing-section";
+import { SECTION_PADDING, SECTION_SCROLL_MARGIN, CONTENT_MAX_W } from "@/components/landing/landing-section";
 import { cn } from "@/lib/utils";
 
 const MISSION_PARAGRAPH =
@@ -16,12 +16,9 @@ const KEYWORDS = [
 
 export function Problem() {
   return (
-    <section id="about" className={SECTION_PADDING}>
+    <section id="about" className={cn(SECTION_PADDING, SECTION_SCROLL_MARGIN)}>
       <Container>
-        <SectionHeading
-          badge="About"
-          title="Invoicing shouldn't take 10+ hours every week"
-        />
+        <SectionHeading title="Invoicing shouldn't take 10+ hours every week" />
         <AnimatedSection delay={0.15} className={cn("mx-auto text-center", CONTENT_MAX_W)}>
           <KeywordHighlight
             paragraph={MISSION_PARAGRAPH}

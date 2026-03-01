@@ -4,7 +4,7 @@ import { Check } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
-import { SECTION_PADDING } from "@/components/landing/landing-section";
+import { SECTION_PADDING, SECTION_SCROLL_MARGIN } from "@/components/landing/landing-section";
 import { cn } from "@/lib/utils";
 
 type BillingPeriod = "monthly" | "yearly";
@@ -84,17 +84,16 @@ const cardVariants = {
   }),
 };
 
-const SUPPORT_EMAIL = "support@receivly.com";
+const SUPPORT_EMAIL = "startwithleo@gmail.com";
 
 export function Pricing() {
   const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>("monthly");
   const [selectedPlan, setSelectedPlan] = useState<PlanId>("pro");
 
   return (
-    <section id="pricing" className={SECTION_PADDING}>
+    <section id="pricing" className={cn(SECTION_PADDING, SECTION_SCROLL_MARGIN)}>
       <Container>
         <SectionHeading
-          badge="Pricing"
           title="Pricing"
           description="Use for free with your whole team. Upgrade to enable unlimited invoices, automatic reminders, and additional features."
         />
@@ -205,7 +204,7 @@ export function Pricing() {
 
               {plan.contactSales ? (
                 <a
-                  href={`mailto:${SUPPORT_EMAIL}?subject=Receivly%20ELITE%20plan%20inquiry`}
+                  href={`mailto:${SUPPORT_EMAIL}?subject=ELITE%20plan%20inquiry`}
                   className={cn(
                     "mt-8 flex w-full items-center justify-center rounded-lg border border-border bg-background px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"

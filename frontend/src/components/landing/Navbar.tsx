@@ -8,12 +8,13 @@ import { useTheme } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { label: "About", href: "/#about" },
-  { label: "Features", href: "/#features" },
-  { label: "Pricing", href: "/#pricing" },
-];
+  { label: "About", sectionId: "about" },
+  { label: "Features", sectionId: "features" },
+  { label: "Pricing", sectionId: "pricing" },
+  { label: "FAQ", sectionId: "faq" },
+] as const;
 
-export function Navbar() {
+export function Navbar({ onNavChange }: { onNavChange?: (section: string) => void }) {
   const { toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -42,15 +43,26 @@ export function Navbar() {
           </Link>
 
           <div className="hidden md:flex md:items-center md:gap-x-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className="rounded-lg px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) =>
+              onNavChange ? (
+                <button
+                  key={link.sectionId}
+                  type="button"
+                  onClick={() => onNavChange(link.sectionId)}
+                  className="rounded-lg px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  {link.label}
+                </button>
+              ) : (
+                <Link
+                  key={link.sectionId}
+                  to={`/#${link.sectionId}`}
+                  className="rounded-lg px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
           </div>
 
           <div className="hidden md:flex md:items-center md:gap-x-3">
@@ -68,9 +80,6 @@ export function Navbar() {
               <Button variant="ghost" size="sm">
                 Sign in
               </Button>
-            </Link>
-            <Link to="/signup">
-              <Button size="sm">Start Free</Button>
             </Link>
           </div>
 
@@ -96,16 +105,30 @@ export function Navbar() {
           >
             <Container className="pb-6 pt-2">
               <div className="space-y-1">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    className="flex min-h-[44px] items-center rounded-lg px-3 py-3 text-base font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+                {navLinks.map((link) =>
+                  onNavChange ? (
+                    <button
+                      key={link.sectionId}
+                      type="button"
+                      className="flex min-h-[44px] w-full items-center rounded-lg px-3 py-3 text-left text-base font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
+                      onClick={() => {
+                        onNavChange(link.sectionId);
+                        setMobileOpen(false);
+                      }}
+                    >
+                      {link.label}
+                    </button>
+                  ) : (
+                    <Link
+                      key={link.sectionId}
+                      to={`/#${link.sectionId}`}
+                      className="flex min-h-[44px] items-center rounded-lg px-3 py-3 text-base font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  )
+                )}
               </div>
               <div className="mt-4 flex flex-col gap-2 border-t border-border pt-4">
                 <Button
@@ -125,9 +148,6 @@ export function Navbar() {
                   <Button variant="ghost" className="min-h-[44px] w-full justify-center">
                     Sign in
                   </Button>
-                </Link>
-                <Link to="/signup" className="w-full" onClick={() => setMobileOpen(false)}>
-                  <Button className="min-h-[48px] w-full justify-center">Start Free</Button>
                 </Link>
               </div>
             </Container>

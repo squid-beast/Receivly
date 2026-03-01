@@ -65,3 +65,5 @@
   min-height: 44px;
   min-width: 44px;
 }
+
+/* Mobile: safe area for notched devices (footer uses pb-[env(safe-area-inset-bottom)]) */

@@ -43,7 +43,7 @@ export function LandingPage() {
     }
   }, [location.hash]);
 
-  // Scroll to section when hash or tab changes (in-app navigation only)
+  // Scroll to section when hash or tab changes (incl. when navigating from another page)
   useEffect(() => {
     const navEntry = performance.getEntriesByType?.("navigation")[0] as
       | PerformanceNavigationTiming
@@ -53,13 +53,17 @@ export function LandingPage() {
     const hash = location.hash || window.location.hash;
     if (hash) {
       const id = hash.replace("#", "");
-      const el = document.getElementById(id);
-      if (el) {
-        requestAnimationFrame(() => {
+      const scrollToEl = () => {
+        const el = document.getElementById(id);
+        if (el) {
           el.scrollIntoView({ behavior: "smooth", block: "start" });
-        });
-      }
-    } else if (location.pathname === "/") {
+        }
+      };
+      // Delay scroll so DOM/layout is ready (e.g. when navigating from footer on another page)
+      const t = setTimeout(scrollToEl, 120);
+      return () => clearTimeout(t);
+    }
+    if (location.pathname === "/") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [location.pathname, location.hash]);
