@@ -22,10 +22,10 @@ export function Help() {
           <p className="mt-4 text-muted-foreground leading-relaxed">
             For anything else, reach out at{" "}
             <a
-              href="mailto:support@receivly.com"
+              href="mailto:startwithleo@gmail.com"
               className="font-medium text-primary-600 underline underline-offset-4 hover:text-primary-700"
             >
-              support@receivly.com
+              startwithleo@gmail.com
             </a>
             .
           </p>

@@ -81,17 +81,19 @@ export function Highlight({
         backgroundSize: "100% 100%",
       }}
       transition={{
-        duration: 2,
-        ease: "linear",
-        delay: 0.5,
+        duration: 0.6,
+        ease: "easeOut",
+        delay: 0.2,
       }}
       style={{
         backgroundRepeat: "no-repeat",
         backgroundPosition: "left center",
         display: "inline",
+        boxDecorationBreak: "clone",
+        WebkitBoxDecorationBreak: "clone",
       }}
       className={cn(
-        "relative inline-block pb-1 px-1 rounded-lg bg-gradient-to-r from-indigo-300 to-purple-300 dark:from-indigo-500 dark:to-purple-500",
+        "relative inline px-1.5 py-0.5 rounded-md bg-gradient-to-r from-indigo-300 to-purple-300 dark:from-indigo-500 dark:to-purple-500 leading-tight",
         className
       )}
     >

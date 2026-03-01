@@ -3,11 +3,14 @@
 /** Consistent vertical padding for all landing sections */
 export const SECTION_PADDING = "py-20 sm:py-28";
 
+/** Scroll margin so fixed navbar doesn't cover section when navigating */
+export const SECTION_SCROLL_MARGIN = "scroll-mt-20";
+
 /** Optional: extra padding for first/last section (hero) */
 export const SECTION_PADDING_HERO = "py-8 md:py-16 lg:py-20";
 
 /** Footer vertical padding */
-export const FOOTER_PADDING = "py-12 lg:py-16";
+export const FOOTER_PADDING = "py-6 lg:py-8";
 
 /** Spacing between section heading and content */
 export const SECTION_HEADING_MB = "mb-14 lg:mb-16";

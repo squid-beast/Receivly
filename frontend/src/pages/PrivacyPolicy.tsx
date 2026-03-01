@@ -145,10 +145,10 @@ export function PrivacyPolicy() {
               <p>
                 For questions about this Privacy Policy or our privacy practices, please contact us at{" "}
                 <a
-                  href="mailto:privacy@receivly.com"
+                  href="mailto:startwithleo@gmail.com"
                   className="text-primary-600 underline underline-offset-4 hover:text-primary-700"
                 >
-                  privacy@receivly.com
+                  startwithleo@gmail.com
                 </a>
                 .
               </p>

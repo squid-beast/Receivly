@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { SECTION_PADDING, SECTION_HEADING_MB } from "@/components/landing/landing-section";
+import { SECTION_PADDING, SECTION_HEADING_MB, SECTION_SCROLL_MARGIN } from "@/components/landing/landing-section";
 import { cn } from "@/lib/utils";
 
 const faqCategories = [
@@ -57,24 +57,21 @@ export function FAQ() {
   const [openKey, setOpenKey] = useState<string | null>(null);
 
   return (
-    <section id="faq" className={SECTION_PADDING}>
+    <section id="faq" className={cn(SECTION_PADDING, SECTION_SCROLL_MARGIN)}>
       <Container>
         <div className="grid gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-16">
           {/* Left: heading + get in touch */}
           <div className={cn("lg:pt-2", SECTION_HEADING_MB)}>
-            <span className="mb-4 inline-flex items-center rounded-full border border-primary-200 bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700 dark:border-white/10 dark:bg-white/5 dark:text-white/80">
-              FAQ
-            </span>
             <h2 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-[2.75rem] lg:leading-[1.15]">
               Got Questions?
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               If you can't find what you're looking for,{" "}
               <a
-                href="mailto:support@receivly.com"
+                href="mailto:startwithleo@gmail.com"
                 className="font-medium text-primary-600 underline underline-offset-4 hover:text-primary-700"
               >
-                get in touch
+                startwithleo@gmail.com
               </a>
               .
             </p>

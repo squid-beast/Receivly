@@ -17,10 +17,10 @@ export function Contact() {
           </p>
           <p className="mt-6">
             <a
-              href="mailto:support@receivly.com"
+              href="mailto:startwithleo@gmail.com"
               className="font-medium text-primary-600 underline underline-offset-4 hover:text-primary-700"
             >
-              support@receivly.com
+              startwithleo@gmail.com
             </a>
           </p>
           <p className="mt-8">
