@@ -20,6 +20,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final WorkspaceRepository workspaceRepository;
 
+    @Transactional(readOnly = true)
     public List<CustomerResponse> list(UUID workspaceId) {
         return customerRepository.findByWorkspaceIdOrderByCreatedAtDesc(workspaceId)
                 .stream()

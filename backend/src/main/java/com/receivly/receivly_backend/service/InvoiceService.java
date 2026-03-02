@@ -28,6 +28,7 @@ public class InvoiceService {
     private final WorkspaceRepository workspaceRepository;
     private final PaymentRepository paymentRepository;
 
+    @Transactional(readOnly = true)
     public List<InvoiceResponse> list(UUID workspaceId) {
         return invoiceRepository.findByWorkspaceIdOrderByCreatedAtDesc(workspaceId)
                 .stream()
@@ -35,6 +36,7 @@ public class InvoiceService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public InvoiceResponse getById(UUID workspaceId, UUID invoiceId) {
         Invoice inv = invoiceRepository.findByIdAndWorkspaceId(invoiceId, workspaceId)
                 .orElseThrow(() -> new IllegalArgumentException("Invoice not found"));

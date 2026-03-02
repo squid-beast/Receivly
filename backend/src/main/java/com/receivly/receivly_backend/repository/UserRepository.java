@@ -12,4 +12,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query("SELECT u FROM User u JOIN FETCH u.workspace WHERE u.id = :id")
     Optional<User> findByIdWithWorkspace(UUID id);
+
+    @Query("SELECT u FROM User u JOIN FETCH u.workspace WHERE u.email = :email")
+    Optional<User> findByEmailWithWorkspace(String email);
 }
