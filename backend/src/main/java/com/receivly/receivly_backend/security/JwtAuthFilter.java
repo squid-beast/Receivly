@@ -33,7 +33,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String token = header.substring(7);
             if (jwtUtil.isValid(token)) {
                 UUID userId = jwtUtil.getUserId(token);
-                User user = userRepository.findById(userId).orElse(null);
+                User user = userRepository.findByIdWithWorkspace(userId).orElse(null);
                 if (user != null) {
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                             user, null, Collections.emptyList());

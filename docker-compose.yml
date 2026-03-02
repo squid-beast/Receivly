@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: receivly-db
+    environment:
+      POSTGRES_DB: receivly
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: receivly_local
+    ports:
+      - "5432:5432"
+    volumes:
+      - receivly_pgdata:/var/lib/postgresql/data
+
+volumes:
+  receivly_pgdata:
