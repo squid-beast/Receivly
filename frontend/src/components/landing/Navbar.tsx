@@ -96,13 +96,23 @@ export function Navbar({ onNavChange }: { onNavChange?: (section: string) => voi
 
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="md:hidden overflow-hidden border-b border-border bg-white/95 dark:bg-background/95 backdrop-blur-xl"
-          >
+          <>
+            {/* Backdrop - tap outside to close on mobile */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm md:hidden"
+              onClick={() => setMobileOpen(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="fixed inset-x-0 top-16 z-50 overflow-hidden border-b border-border bg-white/95 backdrop-blur-xl dark:bg-background/95 md:hidden"
+            >
             <Container className="pb-6 pt-2">
               <div className="space-y-1">
                 {navLinks.map((link) =>
@@ -152,6 +162,7 @@ export function Navbar({ onNavChange }: { onNavChange?: (section: string) => voi
               </div>
             </Container>
           </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>
