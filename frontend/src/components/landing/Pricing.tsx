@@ -9,11 +9,11 @@ import { cn } from "@/lib/utils";
 
 type BillingPeriod = "monthly" | "yearly";
 
-// PRO: $9/month → $108/year. ELITE: $19/month → $228/year.
-const PRO_MONTHLY = 9;
-const PRO_YEARLY = PRO_MONTHLY * 12; // 108
-const ELITE_MONTHLY = 19;
-const ELITE_YEARLY = ELITE_MONTHLY * 12; // 228
+// PRO: $19/month → $228/year. ELITE: $49/month → $588/year.
+const PRO_MONTHLY = 19;
+const PRO_YEARLY = PRO_MONTHLY * 12; // 228
+const ELITE_MONTHLY = 49;
+const ELITE_YEARLY = ELITE_MONTHLY * 12; // 588
 
 type PlanId = "free" | "pro" | "elite";
 
