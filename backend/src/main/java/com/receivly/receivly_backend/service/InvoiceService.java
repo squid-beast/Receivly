@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,8 +52,10 @@ public class InvoiceService {
         Customer customer = customerRepository.findByIdAndWorkspaceId(request.getCustomerId(), workspaceId)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
 
+        int year = Year.now().getValue();
+        String clientCode = deriveClientCode(customer.getName());
         int nextNum = invoiceRepository.findMaxInvoiceNumber(workspaceId) + 1;
-        String invoiceNumber = String.format("INV-%04d", nextNum);
+        String invoiceNumber = String.format("INV-%d-%s-%05d", year, clientCode, nextNum);
 
         int daysToAdd = switch (customer.getPaymentTerms()) {
             case "NET_7" -> 7;
@@ -72,6 +75,19 @@ public class InvoiceService {
                 .build();
         invoice = invoiceRepository.save(invoice);
         return InvoiceResponse.from(invoice);
+    }
+
+    private String deriveClientCode(String customerName) {
+        if (customerName == null) {
+            return "CLIENT";
+        }
+        String normalized = customerName
+                .toUpperCase()
+                .replaceAll("[^A-Z0-9]", "");
+        if (normalized.isEmpty()) {
+            return "CLIENT";
+        }
+        return normalized.length() > 8 ? normalized.substring(0, 8) : normalized;
     }
 
     @Transactional

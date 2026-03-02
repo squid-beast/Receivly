@@ -7,11 +7,21 @@ interface PageHeaderProps {
   className?: string;
 }
 
-export function PageHeader({ title, description, children, className }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  description,
+  children,
+  className,
+}: PageHeaderProps) {
   return (
-    <div className={cn("flex flex-wrap items-center justify-between gap-4", className)}>
+    <div
+      className={cn(
+        "flex flex-wrap items-center justify-between gap-4",
+        className
+      )}
+    >
       <div>
-        <h1 className="font-display text-xl font-semibold text-foreground">
+        <h1 className="font-display text-2xl font-bold tracking-tight text-foreground">
           {title}
         </h1>
         {description && (

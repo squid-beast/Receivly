@@ -54,7 +54,7 @@ export function SignUpPage() {
             finally get paid on time.&rdquo;
           </blockquote>
           <p className="mt-4 text-sm font-medium text-background/60">
-            — A happy small business owner
+            - Anonymous
           </p>
         </div>
         <p className="text-xs text-background/40">

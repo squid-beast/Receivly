@@ -1,33 +1,21 @@
 import { cn } from "@/lib/utils";
-import { CheckCircle2, Clock, AlertCircle } from "lucide-react";
 
-const STATUS_MAP: Record<
-  string,
-  { label: string; icon: typeof Clock; className: string }
-> = {
+const STATUS_MAP: Record<string, { label: string; className: string }> = {
   SENT: {
     label: "Sent",
-    icon: Clock,
-    className:
-      "bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400",
+    className: "bg-blue-50 text-blue-700 ring-blue-600/20 dark:bg-blue-950/40 dark:text-blue-400 dark:ring-blue-400/20",
   },
   PENDING: {
     label: "Pending",
-    icon: Clock,
-    className:
-      "bg-yellow-50 text-yellow-700 dark:bg-yellow-950/30 dark:text-yellow-400",
+    className: "bg-amber-50 text-amber-700 ring-amber-600/20 dark:bg-amber-950/40 dark:text-amber-400 dark:ring-amber-400/20",
   },
   OVERDUE: {
     label: "Overdue",
-    icon: AlertCircle,
-    className:
-      "bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400",
+    className: "bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-950/40 dark:text-red-400 dark:ring-red-400/20",
   },
   PAID: {
     label: "Paid",
-    icon: CheckCircle2,
-    className:
-      "bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-400",
+    className: "bg-emerald-50 text-emerald-700 ring-emerald-600/20 dark:bg-emerald-950/40 dark:text-emerald-400 dark:ring-emerald-400/20",
   },
 };
 
@@ -38,17 +26,15 @@ interface StatusBadgeProps {
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {
   const config = STATUS_MAP[status] || STATUS_MAP.SENT;
-  const Icon = config.icon;
 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium",
+        "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset",
         config.className,
         className
       )}
     >
-      <Icon className="h-3 w-3" />
       {config.label}
     </span>
   );

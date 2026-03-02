@@ -2,13 +2,22 @@ package com.receivly.receivly_backend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "invoices")
+@Table(
+        name = "invoices",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uq_invoices_workspace_number",
+                        columnNames = {"workspace_id", "invoice_number"}
+                )
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,7 +37,7 @@ public class Invoice {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "invoice_number", nullable = false)
     private String invoiceNumber;
 
     @Column(nullable = false)

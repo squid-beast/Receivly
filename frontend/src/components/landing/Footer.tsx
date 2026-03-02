@@ -13,8 +13,6 @@ const productLinks = [
 const companyLinks = [
   { label: "About", href: "/about" },
   { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/contact" },
-  { label: "Privacy", href: "/privacy" },
 ];
 
 const resourcesLinks = [
@@ -113,7 +111,7 @@ export function Footer() {
               Receivly
             </p>
             <p className="text-xs text-muted-foreground">
-              Simple invoicing for small businesses.
+              Track What You're Owed.
             </p>
           </div>
 

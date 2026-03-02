@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { TrendingUp, TrendingDown } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 interface MetricsCardProps {
@@ -21,44 +22,46 @@ export function MetricsCard({
   trend,
 }: MetricsCardProps) {
   return (
-    <div className="rounded-lg border border-border bg-background p-6 shadow-sm">
+    <div className="rounded-xl border border-border bg-background p-5 shadow-sm transition-shadow hover:shadow-md">
       <div className="flex items-center justify-between">
         <p className="text-sm font-medium text-muted-foreground">{label}</p>
         <div
           className={cn(
-            "flex h-8 w-8 items-center justify-center rounded-lg",
+            "flex h-9 w-9 items-center justify-center rounded-lg",
             iconClassName || "bg-primary/10"
           )}
         >
-          <Icon
-            className={cn(
-              "h-4 w-4",
-              iconClassName ? "text-current" : "text-primary"
-            )}
-          />
+          <Icon className="h-4.5 w-4.5 text-current" />
         </div>
       </div>
       <p
         className={cn(
-          "mt-3 font-display text-2xl font-bold text-foreground",
+          "mt-3 font-display text-2xl font-bold tracking-tight text-foreground",
           valueClassName
         )}
       >
         {value}
       </p>
-      <div className="mt-1 flex items-center gap-2">
-        {subtitle && (
-          <p className="text-xs text-muted-foreground">{subtitle}</p>
-        )}
+      <div className="mt-1.5 flex items-center gap-2">
         {trend && (
           <span
             className={cn(
-              "text-xs font-medium",
-              trend.positive ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
+              "inline-flex items-center gap-0.5 text-xs font-semibold",
+              trend.positive
+                ? "text-emerald-600 dark:text-emerald-400"
+                : "text-red-600 dark:text-red-400"
             )}
           >
-            {trend.positive ? "+" : ""}{trend.value}
+            {trend.positive ? (
+              <TrendingUp className="h-3 w-3" />
+            ) : (
+              <TrendingDown className="h-3 w-3" />
+            )}
+            {trend.value}
           </span>
+        )}
+        {subtitle && (
+          <p className="text-xs text-muted-foreground">{subtitle}</p>
         )}
       </div>
     </div>

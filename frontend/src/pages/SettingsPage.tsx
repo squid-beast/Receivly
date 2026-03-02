@@ -88,7 +88,7 @@ export function SettingsPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="mt-6 max-w-lg space-y-6 rounded-lg border border-border bg-background p-6 shadow-sm"
+        className="mt-6 max-w-lg space-y-6 rounded-xl border border-border bg-background p-6 shadow-sm"
       >
         <div className="space-y-2">
           <Label htmlFor="biz-name">Business Name</Label>

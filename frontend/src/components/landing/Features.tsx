@@ -1,12 +1,5 @@
 import { motion } from "framer-motion";
-import {
-  FileText,
-  BellRing,
-  LayoutDashboard,
-  Users,
-  CheckCircle2,
-  Shield,
-} from "lucide-react";
+import { FileText, BellRing, LayoutDashboard, Users, CheckCircle2, Shield } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import {
@@ -25,13 +18,13 @@ const featureColors = [
   { iconBg: "bg-rose-100 dark:bg-rose-950/50", icon: "text-rose-600 dark:text-rose-400" },
 ] as const;
 
-const accentBorderColors = [
-  "hover:border-l-indigo-500",
-  "hover:border-l-emerald-500",
-  "hover:border-l-amber-500",
-  "hover:border-l-violet-500",
-  "hover:border-l-sky-500",
-  "hover:border-l-rose-500",
+const accentHoverClasses = [
+  "hover:border-indigo-500 hover:ring-indigo-500/70",
+  "hover:border-emerald-500 hover:ring-emerald-500/70",
+  "hover:border-amber-500 hover:ring-amber-500/70",
+  "hover:border-violet-500 hover:ring-violet-500/70",
+  "hover:border-sky-500 hover:ring-sky-500/70",
+  "hover:border-rose-500 hover:ring-rose-500/70",
 ] as const;
 
 const keyFeatures = [
@@ -56,7 +49,7 @@ const keyFeatures = [
   {
     title: "Customer Management",
     summary:
-      "Keep names, emails, and default payment terms in one place. Add once and reuse on every invoice—no duplicate data entry.",
+      "Keep names, emails, and default payment terms in one place. Add once and reuse on every invoice with no duplicate data entry.",
     icon: Users,
   },
   {
@@ -68,7 +61,7 @@ const keyFeatures = [
   {
     title: "Security & Data",
     summary:
-      "Your data stays in your own workspace. Isolated and secure—we store only what’s needed to run your invoicing.",
+      "Your data stays in your own workspace. It’s isolated and secure, and we store only what’s needed to run your invoicing.",
     icon: Shield,
   },
 ] as const;
@@ -103,8 +96,8 @@ function FeatureCard({
       viewport={{ once: true, margin: "-24px" }}
       custom={index}
       className={cn(
-        "flex h-full flex-col rounded-2xl border border-border border-l-4 border-l-transparent bg-background p-6 shadow-sm transition-all duration-300 hover:shadow-md",
-        accentBorderColors[index % accentBorderColors.length]
+        "relative flex h-full flex-col rounded-2xl border border-border/70 bg-gradient-to-b from-background/95 to-muted/40 p-6 shadow-sm ring-1 ring-border/40 transition-all duration-300 hover:shadow-lg",
+        accentHoverClasses[index % accentHoverClasses.length]
       )}
     >
       <div className="flex items-center gap-3">
@@ -134,7 +127,7 @@ export function Features() {
       <Container>
         <SectionHeading
           title="Key Features"
-          description="Everything you need to send invoices, track payments, and get paid on time—without the spreadsheets."
+          description="Everything you need to send invoices, track payments, and get paid on time without the spreadsheets."
           align="center"
         />
         <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">

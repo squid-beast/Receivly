@@ -14,7 +14,7 @@ export function About() {
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
             Receivly is built for small businesses that want to send invoices quickly,
-            track who owes them money, and automate follow-ups—without spreadsheets
+            track who owes them money, and automate follow-ups without spreadsheets
             or complicated software.
           </p>
           <p className="mt-4 text-muted-foreground leading-relaxed">
@@ -26,7 +26,7 @@ export function About() {
               to="/"
               className="inline-flex min-h-[44px] items-center text-sm font-medium text-primary-600 hover:text-primary-700 sm:min-h-0"
             >
-              ← Back to home
+              ← Back
             </Link>
           </p>
         </Container>

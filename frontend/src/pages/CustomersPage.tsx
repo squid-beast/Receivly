@@ -1,22 +1,36 @@
 import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
   Pencil,
   Trash2,
-  X,
   Loader2,
   Users,
   Search,
+  MoreVertical,
+  Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AppLayout } from "@/components/AppLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { DataTable } from "@/components/ui/DataTable";
 import { DetailDrawer } from "@/components/ui/DetailDrawer";
 import { EmptyState } from "@/components/ui/EmptyState";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import api from "@/lib/api";
 import { cn } from "@/lib/utils";
 
@@ -115,13 +129,13 @@ export function CustomersPage() {
     return c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q);
   });
 
+  const getTermsLabel = (val: string) =>
+    PAYMENT_TERMS_OPTIONS.find((t) => t.value === val)?.label || val;
+
   const selectClass = cn(
     "flex h-9 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground shadow-sm shadow-black/5",
     "focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/20"
   );
-
-  const getTermsLabel = (val: string) =>
-    PAYMENT_TERMS_OPTIONS.find((t) => t.value === val)?.label || val;
 
   return (
     <AppLayout>
@@ -158,70 +172,125 @@ export function CustomersPage() {
           </Button>
         </EmptyState>
       ) : (
-        <div className="mt-6">
-          <DataTable
-            columns={[
-              {
-                key: "name",
-                header: "Name",
-                render: (c: Customer) => (
-                  <div>
-                    <p className="font-medium text-foreground">{c.name}</p>
-                    <p className="text-xs text-muted-foreground sm:hidden">{c.email}</p>
-                  </div>
-                ),
-              },
-              {
-                key: "email",
-                header: "Email",
-                className: "hidden sm:table-cell",
-                headerClassName: "hidden sm:table-cell",
-                render: (c: Customer) => (
-                  <span className="text-muted-foreground">{c.email}</span>
-                ),
-              },
-              {
-                key: "terms",
-                header: "Payment Terms",
-                className: "hidden md:table-cell",
-                headerClassName: "hidden md:table-cell",
-                render: (c: Customer) => (
-                  <span className="inline-flex rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-foreground">
-                    {getTermsLabel(c.paymentTerms)}
-                  </span>
-                ),
-              },
-              {
-                key: "actions",
-                header: "",
-                className: "text-right",
-                headerClassName: "text-right",
-                render: (c: Customer) => (
-                  <div className="flex items-center justify-end gap-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={(e) => { e.stopPropagation(); openEdit(c); }}
+        <div className="mt-6 space-y-4">
+          <div className="overflow-hidden rounded-xl border border-border bg-background shadow-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border bg-muted/40">
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Customer
+                    </th>
+                    <th className="hidden px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground sm:table-cell">
+                      Payment Terms
+                    </th>
+                    <th className="hidden px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground md:table-cell">
+                      Added
+                    </th>
+                    <th className="w-12 px-4 py-3" />
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredCustomers.map((c, idx) => (
+                    <tr
+                      key={c.id}
+                      onClick={() => setSelectedCustomer(c)}
+                      className={cn(
+                        "cursor-pointer transition-colors hover:bg-muted/30",
+                        idx !== filteredCustomers.length - 1 &&
+                          "border-b border-border/60"
+                      )}
                     >
-                      <Pencil className="h-3.5 w-3.5" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-destructive hover:text-destructive"
-                      onClick={(e) => { e.stopPropagation(); handleDelete(c.id); }}
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </Button>
-                  </div>
-                ),
-              },
-            ]}
-            data={filteredCustomers}
-            keyExtractor={(c) => c.id}
-            onRowClick={(c) => setSelectedCustomer(c)}
-          />
+                      <td className="px-4 py-3.5">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+                            {c.name.charAt(0).toUpperCase()}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-semibold text-foreground">{c.name}</p>
+                            <p className="truncate text-xs text-muted-foreground">
+                              {c.email}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="hidden px-4 py-3.5 sm:table-cell">
+                        <span className="inline-flex rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-foreground">
+                          {getTermsLabel(c.paymentTerms)}
+                        </span>
+                      </td>
+                      <td className="hidden px-4 py-3.5 text-muted-foreground md:table-cell">
+                        {new Date(c.createdAt).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </td>
+                      <td className="px-2 py-3.5">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedCustomer(c);
+                              }}
+                            >
+                              <Eye className="mr-2 h-4 w-4" />
+                              View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openEdit(c);
+                              }}
+                            >
+                              <Pencil className="mr-2 h-4 w-4" />
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete(c.id);
+                              }}
+                              className="text-destructive focus:text-destructive"
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </td>
+                    </tr>
+                  ))}
+                  {filteredCustomers.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan={4}
+                        className="px-4 py-12 text-center text-sm text-muted-foreground"
+                      >
+                        No customers match your search.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <p className="text-xs text-muted-foreground">
+            Showing {filteredCustomers.length} of {customers.length} customers
+          </p>
         </div>
       )}
 
@@ -237,7 +306,9 @@ export function CustomersPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Email</span>
-                <span className="text-sm text-foreground">{selectedCustomer.email}</span>
+                <span className="text-sm text-foreground">
+                  {selectedCustomer.email}
+                </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Payment Terms</span>
@@ -248,20 +319,31 @@ export function CustomersPage() {
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Added</span>
                 <span className="text-sm text-foreground">
-                  {new Date(selectedCustomer.createdAt).toLocaleDateString()}
+                  {new Date(selectedCustomer.createdAt).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
                 </span>
               </div>
             </div>
 
             <div className="flex gap-3 border-t border-border pt-4">
-              <Button variant="outline" className="flex-1" onClick={() => { openEdit(selectedCustomer); setSelectedCustomer(null); }}>
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => {
+                  openEdit(selectedCustomer);
+                  setSelectedCustomer(null);
+                }}
+              >
                 <Pencil className="mr-1.5 h-4 w-4" />
                 Edit
               </Button>
               <Button
                 variant="outline"
                 className="flex-1 text-destructive hover:text-destructive"
-                onClick={() => { handleDelete(selectedCustomer.id); }}
+                onClick={() => handleDelete(selectedCustomer.id)}
               >
                 <Trash2 className="mr-1.5 h-4 w-4" />
                 Delete
@@ -271,91 +353,88 @@ export function CustomersPage() {
         )}
       </DetailDrawer>
 
-      {/* Add/Edit Modal */}
-      <AnimatePresence>
-        {modalOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
-              onClick={() => setModalOpen(false)}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              transition={{ duration: 0.2, ease: [0.21, 0.47, 0.32, 0.98] as const }}
-              className="fixed inset-x-4 top-[10%] z-50 mx-auto max-w-md rounded-lg border border-border bg-background p-6 shadow-xl sm:inset-x-auto"
-            >
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-foreground">
-                  {editingId ? "Edit Customer" : "Add Customer"}
-                </h2>
-                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setModalOpen(false)}>
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
+      {/* Add/Edit Customer Dialog */}
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {editingId ? "Edit Customer" : "Add Customer"}
+            </DialogTitle>
+            <DialogDescription>
+              {editingId
+                ? "Update customer details below."
+                : "Add a new customer to start sending invoices."}
+            </DialogDescription>
+          </DialogHeader>
 
-              {error && (
-                <div className="mt-3 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-                  {error}
-                </div>
-              )}
+          {error && (
+            <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+              {error}
+            </div>
+          )}
 
-              <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="cust-name">Name</Label>
-                  <Input
-                    id="cust-name"
-                    placeholder="Acme Inc."
-                    value={form.name}
-                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                    required
-                  />
-                </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="cust-name">Name</Label>
+              <Input
+                id="cust-name"
+                placeholder="Acme Inc."
+                value={form.name}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, name: e.target.value }))
+                }
+                required
+              />
+            </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="cust-email">Email</Label>
-                  <Input
-                    id="cust-email"
-                    type="email"
-                    placeholder="billing@acme.com"
-                    value={form.email}
-                    onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                    required
-                  />
-                </div>
+            <div className="space-y-2">
+              <Label htmlFor="cust-email">Email</Label>
+              <Input
+                id="cust-email"
+                type="email"
+                placeholder="billing@acme.com"
+                value={form.email}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, email: e.target.value }))
+                }
+                required
+              />
+            </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="cust-terms">Payment Terms</Label>
-                  <select
-                    id="cust-terms"
-                    value={form.paymentTerms}
-                    onChange={(e) => setForm((f) => ({ ...f, paymentTerms: e.target.value }))}
-                    className={selectClass}
-                  >
-                    {PAYMENT_TERMS_OPTIONS.map((t) => (
-                      <option key={t.value} value={t.value}>{t.label}</option>
-                    ))}
-                  </select>
-                </div>
+            <div className="space-y-2">
+              <Label htmlFor="cust-terms">Payment Terms</Label>
+              <select
+                id="cust-terms"
+                value={form.paymentTerms}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, paymentTerms: e.target.value }))
+                }
+                className={selectClass}
+              >
+                {PAYMENT_TERMS_OPTIONS.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-                <div className="flex justify-end gap-3 pt-2">
-                  <Button type="button" variant="ghost" onClick={() => setModalOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={saving}>
-                    {saving && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
-                    {editingId ? "Save Changes" : "Add Customer"}
-                  </Button>
-                </div>
-              </form>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={saving}>
+                {saving && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
+                {editingId ? "Save Changes" : "Add Customer"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </AppLayout>
   );
 }

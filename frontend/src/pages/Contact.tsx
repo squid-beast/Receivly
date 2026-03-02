@@ -28,7 +28,7 @@ export function Contact() {
               to="/"
               className="text-sm font-medium text-primary-600 hover:text-primary-700"
             >
-              ← Back to home
+              ← Back
             </Link>
           </p>
         </Container>

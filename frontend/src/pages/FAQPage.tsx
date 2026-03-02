@@ -14,7 +14,7 @@ export function FAQPage() {
             to="/"
             className="text-sm font-medium text-primary-600 hover:text-primary-700"
           >
-            ← Back to home
+            ← Back
           </Link>
         </div>
       </main>
