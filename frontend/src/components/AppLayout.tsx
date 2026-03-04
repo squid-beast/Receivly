@@ -27,6 +27,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import logo from "@/assets/logo.svg";
 
 const mainNav = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -146,9 +147,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <div className="pb-4 pt-7">
                 <Link
                   to="/dashboard"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-600 text-base font-bold text-white dark:bg-emerald-500"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-base font-bold text-white shadow-sm dark:border-gray-800 dark:bg-gray-900"
                 >
-                  R
+                  <img
+                    src={logo}
+                    alt="Receivly"
+                    className="h-7 w-7 object-contain"
+                  />
                 </Link>
               </div>
 
@@ -212,8 +217,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               {/* Logo */}
               <div className="px-7 pb-2 pt-8">
                 <Link to="/dashboard" className="flex items-center gap-2.5">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white dark:bg-emerald-500">
-                    R
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-sm font-bold text-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                    <img
+                      src={logo}
+                      alt="Receivly"
+                      className="h-7 w-7 object-contain"
+                    />
                   </span>
                   <span className="text-xl font-bold font-display text-foreground">
                     Receivly
@@ -315,8 +324,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                     className="flex items-center gap-2.5"
                     onClick={() => setSidebarOpen(false)}
                   >
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white dark:bg-emerald-500">
-                      R
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-sm font-bold text-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                      <img
+                        src={logo}
+                        alt="Receivly"
+                        className="h-7 w-7 object-contain"
+                      />
                     </span>
                     <span className="text-xl font-bold font-display text-foreground">
                       Receivly

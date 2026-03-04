@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { useTheme } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/logo.svg";
 
 const navLinks = [
   { label: "About", sectionId: "about" },
@@ -37,6 +38,7 @@ export function Navbar({ onNavChange }: { onNavChange?: (section: string) => voi
       <Container>
         <nav className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2">
+            <img src={logo} alt="Receivly" className="h-7 w-7 shrink-0 object-contain" />
             <span className="text-lg font-bold font-display text-foreground">
               Receivly
             </span>

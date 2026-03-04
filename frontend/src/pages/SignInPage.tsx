@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/logo.svg";
 
 export function SignInPage() {
   const { signin } = useAuth();
@@ -37,7 +38,8 @@ export function SignInPage() {
     <div className="flex min-h-screen bg-background">
       {/* Left panel - branding */}
       <div className="hidden w-1/2 flex-col justify-between bg-foreground p-12 lg:flex">
-        <Link to="/" className="text-lg font-bold font-display text-background">
+        <Link to="/" className="flex items-center gap-2 text-lg font-bold font-display text-background">
+          <img src={logo} alt="Receivly" className="h-7 w-7 shrink-0 object-contain invert" />
           Receivly
         </Link>
         <div>
@@ -64,8 +66,9 @@ export function SignInPage() {
         >
           <Link
             to="/"
-            className="mb-8 block text-lg font-bold font-display text-foreground lg:hidden"
+            className="mb-8 flex items-center gap-2 text-lg font-bold font-display text-foreground lg:hidden"
           >
+            <img src={logo} alt="Receivly" className="h-7 w-7 shrink-0 object-contain" />
             Receivly
           </Link>
 

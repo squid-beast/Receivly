@@ -15,8 +15,6 @@ import {
   TrendingUp,
   Loader2,
   Send,
-  Wallet,
-  ArrowDownToLine,
   Search,
   ChevronLeft,
   ChevronRight,
@@ -275,7 +273,7 @@ export function DashboardPage() {
               />
             </div>
 
-            {/* Transaction Volume + Quick Transfer */}
+            {/* Transaction Volume + Quick Invoice */}
             <div className="grid gap-8 lg:grid-cols-3">
               <div className="rounded-3xl border border-border/70 bg-gradient-to-b from-background to-muted/10 p-6 shadow-sm lg:col-span-2">
                 <div className="mb-5 flex items-center justify-between gap-4">
@@ -371,7 +369,7 @@ export function DashboardPage() {
 
               <div className="rounded-xl border border-border bg-background p-6 shadow-sm">
                 <h3 className="mb-4 font-semibold text-foreground">
-                  Quick Transfer
+                  Quick Invoice
                 </h3>
                 <p className="mb-5 text-sm text-muted-foreground">
                   Your customers — send invoices or request payment
@@ -409,24 +407,6 @@ export function DashboardPage() {
                   >
                     <Send className="mr-1.5 h-4 w-4" />
                     Send
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => navigate("/dashboard/invoices")}
-                  >
-                    <ArrowDownToLine className="mr-1.5 h-4 w-4" />
-                    Request
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => navigate("/dashboard/invoices")}
-                  >
-                    <Wallet className="mr-1.5 h-4 w-4" />
-                    Deposit
                   </Button>
                 </div>
               </div>
