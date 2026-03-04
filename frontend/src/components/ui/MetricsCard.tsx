@@ -22,7 +22,7 @@ export function MetricsCard({
   trend,
 }: MetricsCardProps) {
   return (
-    <div className="rounded-xl border border-border bg-background p-5 shadow-sm transition-shadow hover:shadow-md">
+    <div className="rounded-xl border border-border bg-background p-6 shadow-sm transition-shadow hover:shadow-md">
       <div className="flex items-center justify-between">
         <p className="text-sm font-medium text-muted-foreground">{label}</p>
         <div
@@ -36,13 +36,13 @@ export function MetricsCard({
       </div>
       <p
         className={cn(
-          "mt-3 font-display text-2xl font-bold tracking-tight text-foreground",
+          "mt-4 font-display text-2xl font-bold tracking-tight text-foreground",
           valueClassName
         )}
       >
         {value}
       </p>
-      <div className="mt-1.5 flex items-center gap-2">
+      <div className="mt-2 flex items-center gap-2">
         {trend && (
           <span
             className={cn(

@@ -14,7 +14,10 @@ public class CustomerResponse {
     private UUID id;
     private String name;
     private String email;
+    private String phone;
     private String paymentTerms;
+    private String address;
+    private String notes;
     private Instant createdAt;
 
     public static CustomerResponse from(Customer c) {
@@ -22,7 +25,10 @@ public class CustomerResponse {
                 .id(c.getId())
                 .name(c.getName())
                 .email(c.getEmail())
+                .phone(c.getPhone())
                 .paymentTerms(c.getPaymentTerms())
+                .address(c.getAddress())
+                .notes(c.getNotes())
                 .createdAt(c.getCreatedAt())
                 .build();
     }

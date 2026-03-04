@@ -11,11 +11,11 @@ interface EmptyStateProps {
 
 export function EmptyState({ icon: Icon, title, description, children, className }: EmptyStateProps) {
   return (
-    <div className={cn("rounded-lg border border-dashed border-border p-12 text-center", className)}>
+    <div className={cn("rounded-xl border border-dashed border-border p-16 text-center", className)}>
       <Icon className="mx-auto h-12 w-12 text-muted-foreground/40" />
-      <h2 className="mt-4 text-lg font-semibold text-foreground">{title}</h2>
-      <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-      {children && <div className="mt-6">{children}</div>}
+      <h2 className="mt-5 text-lg font-semibold text-foreground">{title}</h2>
+      <p className="mt-1.5 text-sm text-muted-foreground">{description}</p>
+      {children && <div className="mt-8">{children}</div>}
     </div>
   );
 }

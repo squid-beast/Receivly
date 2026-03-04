@@ -42,12 +42,17 @@ public class WeeklySummaryScheduler {
 
             int sent = 0, paid = 0, overdue = 0;
             BigDecimal collected = BigDecimal.ZERO;
+            BigDecimal overdueAmount = BigDecimal.ZERO;
             BigDecimal outstanding = BigDecimal.ZERO;
 
             for (Invoice inv : allInvoices) {
                 switch (inv.getStatus()) {
                     case SENT -> { sent++; outstanding = outstanding.add(inv.getAmount()); }
-                    case OVERDUE -> { overdue++; outstanding = outstanding.add(inv.getAmount()); }
+                    case OVERDUE -> {
+                        overdue++;
+                        overdueAmount = overdueAmount.add(inv.getAmount());
+                        outstanding = outstanding.add(inv.getAmount());
+                    }
                     case PAID -> { paid++; collected = collected.add(inv.getAmount()); }
                 }
             }
@@ -59,13 +64,14 @@ public class WeeklySummaryScheduler {
                     .invoicesSent(sent)
                     .invoicesPaid(paid)
                     .invoicesOverdue(overdue)
+                    .totalOverdue(overdueAmount)
                     .totalCollected(collected)
                     .totalOutstanding(outstanding)
                     .build();
             weeklySummaryRepository.save(summary);
 
-            log.info("WEEKLY SUMMARY for {}: sent={}, paid={}, overdue={}, collected={}, outstanding={}",
-                    ws.getBusinessName(), sent, paid, overdue, collected, outstanding);
+            log.info("WEEKLY SUMMARY for {}: invoicesSent={}, paymentsReceived={}, overdueCount={}, overdueAmount={}, totalCollected={}, totalOutstanding={}",
+                    ws.getBusinessName(), sent, paid, overdue, overdueAmount, collected, outstanding);
         }
     }
 }

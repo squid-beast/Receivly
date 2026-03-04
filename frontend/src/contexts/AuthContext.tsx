@@ -14,6 +14,7 @@ export interface AuthUser {
   email: string;
   workspaceId: string;
   businessName: string;
+  timezone?: string;
   onboardingCompleted: boolean;
 }
 

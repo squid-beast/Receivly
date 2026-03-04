@@ -51,6 +51,7 @@ public class AuthService {
                 .email(user.getEmail())
                 .workspaceId(workspace.getId())
                 .businessName(workspace.getBusinessName())
+                .timezone(workspace.getTimezone())
                 .onboardingCompleted(workspace.isOnboardingCompleted())
                 .build();
     }
@@ -74,6 +75,7 @@ public class AuthService {
                 .email(user.getEmail())
                 .workspaceId(workspace.getId())
                 .businessName(workspace.getBusinessName())
+                .timezone(workspace.getTimezone())
                 .onboardingCompleted(workspace.isOnboardingCompleted())
                 .build();
     }
@@ -87,6 +89,7 @@ public class AuthService {
                 .email(user.getEmail())
                 .workspaceId(workspace.getId())
                 .businessName(workspace.getBusinessName())
+                .timezone(workspace.getTimezone())
                 .onboardingCompleted(workspace.isOnboardingCompleted())
                 .build();
     }

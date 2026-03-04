@@ -28,9 +28,18 @@ public class Customer {
     @Column(nullable = false)
     private String email;
 
+    @Column(length = 50)
+    private String phone;
+
     @Column(nullable = false)
     @Builder.Default
     private String paymentTerms = "NET_30";
+
+    @Column(length = 500)
+    private String address;
+
+    @Column(length = 2000)
+    private String notes;
 
     @Column(nullable = false, updatable = false)
     @Builder.Default

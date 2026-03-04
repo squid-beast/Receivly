@@ -6,6 +6,8 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -46,24 +48,45 @@ public class Invoice {
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal amount;
 
+    @Column(nullable = false, precision = 12, scale = 2)
+    @Builder.Default
+    private BigDecimal subtotal = BigDecimal.ZERO;
+
+    @Column(nullable = false, precision = 5, scale = 2)
+    @Builder.Default
+    private BigDecimal taxRate = BigDecimal.ZERO;
+
+    @Column(nullable = false, precision = 12, scale = 2)
+    @Builder.Default
+    private BigDecimal discountAmount = BigDecimal.ZERO;
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<InvoiceLineItem> lineItems = new ArrayList<>();
+
     @Column(nullable = false, length = 3)
     private String currency;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private Status status = Status.SENT;
+    private Status status = Status.DRAFT;
+
+    @Column(nullable = false)
+    private LocalDate issueDate;
 
     @Column(nullable = false)
     private LocalDate dueDate;
 
     private Instant paidAt;
 
+    private Instant sentAt;
+
     @Column(nullable = false, updatable = false)
     @Builder.Default
     private Instant createdAt = Instant.now();
 
     public enum Status {
-        SENT, OVERDUE, PAID
+        DRAFT, SENT, OVERDUE, PAID
     }
 }

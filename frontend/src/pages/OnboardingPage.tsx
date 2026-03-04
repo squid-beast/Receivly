@@ -8,6 +8,7 @@ import {
   ArrowRight,
   ArrowLeft,
   Loader2,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
@@ -34,8 +35,25 @@ const PAYMENT_TERMS = [
 const STEPS = [
   { title: "Currency", icon: DollarSign },
   { title: "Payment Terms", icon: Clock },
+  { title: "Timezone", icon: Globe },
   { title: "All Set", icon: CheckCircle2 },
 ] as const;
+
+const TIMEZONES = [
+  "UTC",
+  "America/New_York",
+  "America/Chicago",
+  "America/Denver",
+  "America/Los_Angeles",
+  "Europe/London",
+  "Europe/Paris",
+  "Europe/Berlin",
+  "Asia/Kolkata",
+  "Asia/Dubai",
+  "Asia/Singapore",
+  "Asia/Tokyo",
+  "Australia/Sydney",
+];
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -56,6 +74,13 @@ export function OnboardingPage() {
   const [direction, setDirection] = useState(1);
   const [currency, setCurrency] = useState("USD");
   const [paymentTerms, setPaymentTerms] = useState("NET_30");
+  const [timezone, setTimezone] = useState(() => {
+    try {
+      return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    } catch {
+      return "UTC";
+    }
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -76,6 +101,7 @@ export function OnboardingPage() {
       await api.patch("/workspaces/onboarding", {
         currency,
         defaultPaymentTerms: paymentTerms,
+        timezone,
       });
       updateUser({ onboardingCompleted: true });
       navigate("/dashboard");
@@ -237,6 +263,44 @@ export function OnboardingPage() {
 
               {step === 2 && (
                 <motion.div
+                  key="timezone"
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.25, ease: [0.21, 0.47, 0.32, 0.98] as const }}
+                >
+                  <h2 className="text-lg font-semibold text-foreground">
+                    Timezone
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Used for due dates and reminder times. You can change it
+                    later in settings.
+                  </p>
+                  <div className="mt-6 space-y-2 max-h-64 overflow-y-auto pr-1">
+                    {TIMEZONES.map((tz) => (
+                      <button
+                        key={tz}
+                        type="button"
+                        onClick={() => setTimezone(tz)}
+                        className={cn(
+                          "flex w-full items-center gap-3 rounded-xl border p-3 text-left text-sm transition-all",
+                          timezone === tz
+                            ? "border-foreground bg-foreground/5 ring-1 ring-foreground/10"
+                            : "border-border hover:border-muted-foreground/40"
+                        )}
+                      >
+                        <Globe className="h-4 w-4 shrink-0 text-muted-foreground" />
+                        <span className="font-medium text-foreground">{tz}</span>
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {step === 3 && (
+                <motion.div
                   key="done"
                   custom={direction}
                   variants={slideVariants}
@@ -282,6 +346,14 @@ export function OnboardingPage() {
                             ?.label}
                         </span>
                       </div>
+                      <div className="flex items-center justify-between rounded-lg border border-border px-4 py-3">
+                        <span className="text-sm text-muted-foreground">
+                          Timezone
+                        </span>
+                        <span className="text-sm font-medium text-foreground">
+                          {timezone}
+                        </span>
+                      </div>
                     </div>
                     {error && (
                       <div className="mt-4 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
@@ -304,10 +376,7 @@ export function OnboardingPage() {
                 <div />
               )}
               {step < STEPS.length - 1 ? (
-                <Button
-                  onClick={goNext}
-                  className="bg-foreground text-background hover:bg-foreground/90"
-                >
+                <Button onClick={goNext}>
                   Continue
                   <ArrowRight className="ml-1.5 h-4 w-4" />
                 </Button>
@@ -315,7 +384,6 @@ export function OnboardingPage() {
                 <Button
                   onClick={handleComplete}
                   disabled={loading}
-                  className="bg-foreground text-background hover:bg-foreground/90"
                 >
                   {loading ? (
                     <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />

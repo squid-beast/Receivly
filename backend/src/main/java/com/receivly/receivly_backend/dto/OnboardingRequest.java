@@ -6,9 +6,13 @@ import lombok.Data;
 
 @Data
 public class OnboardingRequest {
-    @NotBlank @Size(min = 3, max = 3)
+    @NotBlank
+    @Size(min = 3, max = 3)
     private String currency;
 
     @NotBlank
     private String defaultPaymentTerms;
+
+    @NotBlank
+    private String timezone;
 }

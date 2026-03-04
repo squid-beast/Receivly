@@ -17,6 +17,7 @@ public class WeeklySummaryResponse {
     private int invoicesSent;
     private int invoicesPaid;
     private int invoicesOverdue;
+    private BigDecimal totalOverdue;
     private BigDecimal totalCollected;
     private BigDecimal totalOutstanding;
 
@@ -24,7 +25,7 @@ public class WeeklySummaryResponse {
         return new WeeklySummaryResponse(
                 s.getId(), s.getWeekStart(), s.getWeekEnd(),
                 s.getInvoicesSent(), s.getInvoicesPaid(), s.getInvoicesOverdue(),
-                s.getTotalCollected(), s.getTotalOutstanding()
+                s.getTotalOverdue(), s.getTotalCollected(), s.getTotalOutstanding()
         );
     }
 }

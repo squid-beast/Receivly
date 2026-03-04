@@ -25,6 +25,22 @@ const PAYMENT_TERMS = [
   { value: "NET_60", label: "Net 60" },
 ];
 
+const TIMEZONES = [
+  "UTC",
+  "America/New_York",
+  "America/Chicago",
+  "America/Denver",
+  "America/Los_Angeles",
+  "Europe/London",
+  "Europe/Paris",
+  "Europe/Berlin",
+  "Asia/Kolkata",
+  "Asia/Dubai",
+  "Asia/Singapore",
+  "Asia/Tokyo",
+  "Australia/Sydney",
+];
+
 export function SettingsPage() {
   const { updateUser } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -35,6 +51,9 @@ export function SettingsPage() {
     businessName: "",
     currency: "USD",
     defaultPaymentTerms: "NET_30",
+    timezone: "UTC",
+    reminderAutomationEnabled: true,
+    address: "",
   });
 
   useEffect(() => {
@@ -51,7 +70,7 @@ export function SettingsPage() {
     setSaving(true);
     try {
       await api.put("/workspaces/settings", form);
-      updateUser({ businessName: form.businessName });
+      updateUser({ businessName: form.businessName, timezone: form.timezone });
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (err: unknown) {
@@ -72,7 +91,11 @@ export function SettingsPage() {
   if (loading) {
     return (
       <AppLayout>
-        <div className="flex justify-center pt-12">
+        <PageHeader
+          title="Settings"
+          description="Manage your workspace configuration."
+        />
+        <div className="mt-16 flex justify-center">
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
       </AppLayout>
@@ -88,7 +111,7 @@ export function SettingsPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="mt-6 max-w-lg space-y-6 rounded-xl border border-border bg-background p-6 shadow-sm"
+        className="mt-8 max-w-lg space-y-6 rounded-xl border border-border bg-background p-8 shadow-sm"
       >
         <div className="space-y-2">
           <Label htmlFor="biz-name">Business Name</Label>
@@ -99,6 +122,22 @@ export function SettingsPage() {
               setForm((f) => ({ ...f, businessName: e.target.value }))
             }
             required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="address">Business Address</Label>
+          <textarea
+            id="address"
+            rows={3}
+            value={form.address ?? ""}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, address: e.target.value }))
+            }
+            placeholder="e.g. 103 North Main Street, New York, 21231, USA"
+            className={cn(
+              "flex w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground shadow-sm shadow-black/5 placeholder:text-muted-foreground focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/20"
+            )}
           />
         </div>
 
@@ -138,6 +177,42 @@ export function SettingsPage() {
           </select>
         </div>
 
+        <div className="space-y-2">
+          <Label htmlFor="timezone">Timezone</Label>
+          <select
+            id="timezone"
+            value={form.timezone}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, timezone: e.target.value }))
+            }
+            className={selectClass}
+          >
+            {TIMEZONES.map((tz) => (
+              <option key={tz} value={tz}>
+                {tz}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <input
+            id="reminder-automation"
+            type="checkbox"
+            checked={form.reminderAutomationEnabled}
+            onChange={(e) =>
+              setForm((f) => ({
+                ...f,
+                reminderAutomationEnabled: e.target.checked,
+              }))
+            }
+            className="h-4 w-4 rounded border-input accent-primary"
+          />
+          <Label htmlFor="reminder-automation" className="cursor-pointer font-normal">
+            Enable reminder automation (overdue invoices get automatic follow-up emails)
+          </Label>
+        </div>
+
         {error && (
           <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
             {error}
@@ -145,7 +220,7 @@ export function SettingsPage() {
         )}
 
         {success && (
-          <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-900/30 dark:bg-green-950/30 dark:text-green-400">
+          <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-900/30 dark:bg-emerald-950/30 dark:text-emerald-400">
             Settings saved successfully.
           </div>
         )}

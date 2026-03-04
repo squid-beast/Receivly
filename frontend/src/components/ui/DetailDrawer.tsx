@@ -42,7 +42,7 @@ export function DetailDrawer({
             className="fixed inset-y-0 right-0 z-50 flex w-full flex-col border-l border-border bg-background shadow-xl sm:w-[420px]"
           >
             {/* Header */}
-            <div className="flex items-start justify-between border-b border-border px-6 py-4">
+            <div className="flex items-start justify-between border-b border-border px-6 py-5">
               <div>
                 <h2 className="text-lg font-semibold text-foreground">
                   {title}
@@ -64,7 +64,7 @@ export function DetailDrawer({
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-y-auto px-6 py-4">{children}</div>
+            <div className="flex-1 overflow-y-auto px-6 py-6">{children}</div>
           </motion.div>
         </>
       )}

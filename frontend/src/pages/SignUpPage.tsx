@@ -162,10 +162,7 @@ export function SignUpPage() {
             <Button
               type="submit"
               disabled={loading}
-              className={cn(
-                "w-full bg-foreground text-background hover:bg-foreground/90",
-                loading && "opacity-70"
-              )}
+              className={cn("w-full", loading && "opacity-70")}
             >
               {loading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -20,7 +20,9 @@ import { DashboardPage } from "@/pages/DashboardPage";
 import { OnboardingPage } from "@/pages/OnboardingPage";
 import { CustomersPage } from "@/pages/CustomersPage";
 import { InvoicesPage } from "@/pages/InvoicesPage";
+import { NewInvoicePage } from "@/pages/NewInvoicePage";
 import { SettingsPage } from "@/pages/SettingsPage";
+import { HelpSupportPage } from "@/pages/HelpSupportPage";
 
 // Prevent browser from restoring scroll on refresh so we can always show home from top
 if (typeof window !== "undefined") {
@@ -60,6 +62,22 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <InvoicesPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/invoices/new",
+    element: (
+      <ProtectedRoute>
+        <NewInvoicePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/dashboard/help",
+    element: (
+      <ProtectedRoute>
+        <HelpSupportPage />
       </ProtectedRoute>
     ),
   },

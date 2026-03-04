@@ -6,12 +6,19 @@ import lombok.Data;
 
 @Data
 public class CustomerRequest {
-    @NotBlank
+    @NotBlank(message = "Business name is required")
     private String name;
 
-    @NotBlank @Email
+    @NotBlank(message = "Billing email is required")
+    @Email
     private String email;
+
+    private String phone;
 
     @NotBlank
     private String paymentTerms;
+
+    private String address;
+
+    private String notes;
 }

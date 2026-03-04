@@ -17,7 +17,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
 
     List<Invoice> findByWorkspaceIdAndStatusOrderByDueDateAsc(UUID workspaceId, Invoice.Status status);
 
-    List<Invoice> findByStatusAndDueDateBefore(Invoice.Status status, LocalDate date);
+    List<Invoice> findByWorkspaceIdAndStatusAndDueDateBefore(UUID workspaceId, Invoice.Status status, LocalDate date);
 
     List<Invoice> findByWorkspaceIdAndStatus(UUID workspaceId, Invoice.Status status);
 

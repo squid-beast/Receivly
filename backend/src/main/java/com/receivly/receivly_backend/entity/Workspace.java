@@ -29,9 +29,20 @@ public class Workspace {
     @Builder.Default
     private String defaultPaymentTerms = "NET_30";
 
+    @Column(nullable = false, length = 64)
+    @Builder.Default
+    private String timezone = "UTC";
+
+    @Column(length = 500)
+    private String address;
+
     @Column(nullable = false)
     @Builder.Default
     private boolean onboardingCompleted = false;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean reminderAutomationEnabled = true;
 
     @Column(nullable = false, updatable = false)
     @Builder.Default

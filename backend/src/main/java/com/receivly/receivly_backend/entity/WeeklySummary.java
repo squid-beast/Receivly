@@ -40,6 +40,9 @@ public class WeeklySummary {
     private int invoicesOverdue;
 
     @Column(nullable = false, precision = 12, scale = 2)
+    private BigDecimal totalOverdue;
+
+    @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal totalCollected;
 
     @Column(nullable = false, precision = 12, scale = 2)

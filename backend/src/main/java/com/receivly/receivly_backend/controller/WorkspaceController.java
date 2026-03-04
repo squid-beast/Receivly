@@ -31,6 +31,7 @@ public class WorkspaceController {
                 "businessName", workspace.getBusinessName(),
                 "currency", workspace.getCurrency(),
                 "defaultPaymentTerms", workspace.getDefaultPaymentTerms(),
+                "timezone", workspace.getTimezone(),
                 "onboardingCompleted", workspace.isOnboardingCompleted()
         ));
     }
@@ -41,7 +42,10 @@ public class WorkspaceController {
         return ResponseEntity.ok(Map.of(
                 "businessName", workspace.getBusinessName(),
                 "currency", workspace.getCurrency(),
-                "defaultPaymentTerms", workspace.getDefaultPaymentTerms()
+                "defaultPaymentTerms", workspace.getDefaultPaymentTerms(),
+                "timezone", workspace.getTimezone(),
+                "reminderAutomationEnabled", workspace.isReminderAutomationEnabled(),
+                "address", workspace.getAddress() != null ? workspace.getAddress() : ""
         ));
     }
 
@@ -54,7 +58,10 @@ public class WorkspaceController {
         return ResponseEntity.ok(Map.of(
                 "businessName", workspace.getBusinessName(),
                 "currency", workspace.getCurrency(),
-                "defaultPaymentTerms", workspace.getDefaultPaymentTerms()
+                "defaultPaymentTerms", workspace.getDefaultPaymentTerms(),
+                "timezone", workspace.getTimezone(),
+                "reminderAutomationEnabled", workspace.isReminderAutomationEnabled(),
+                "address", workspace.getAddress() != null ? workspace.getAddress() : ""
         ));
     }
 

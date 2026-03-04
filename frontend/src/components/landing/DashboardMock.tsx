@@ -22,7 +22,7 @@ const metrics = [
 
 export function DashboardMock() {
   return (
-    <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-background shadow-2xl shadow-gray-200/60">
+    <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-background shadow-2xl shadow-foreground/5">
       <div className="flex items-center gap-2 border-b border-border bg-muted/50 px-4 py-3">
         <div className="flex gap-1.5">
           <span className="h-3 w-3 rounded-full bg-[#FF5F57]" />

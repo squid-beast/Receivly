@@ -37,7 +37,10 @@ public class CustomerService {
                 .workspace(workspace)
                 .name(request.getName())
                 .email(request.getEmail())
+                .phone(request.getPhone())
                 .paymentTerms(request.getPaymentTerms())
+                .address(request.getAddress())
+                .notes(request.getNotes())
                 .build();
         customer = customerRepository.save(customer);
         return CustomerResponse.from(customer);
@@ -50,7 +53,12 @@ public class CustomerService {
 
         customer.setName(request.getName());
         customer.setEmail(request.getEmail());
+        customer.setPhone(request.getPhone());
         customer.setPaymentTerms(request.getPaymentTerms());
+        if (request.getAddress() != null) {
+            customer.setAddress(request.getAddress());
+        }
+        customer.setNotes(request.getNotes());
         customer = customerRepository.save(customer);
         return CustomerResponse.from(customer);
     }

@@ -23,6 +23,7 @@ public class WorkspaceService {
 
         workspace.setCurrency(request.getCurrency());
         workspace.setDefaultPaymentTerms(request.getDefaultPaymentTerms());
+        workspace.setTimezone(request.getTimezone());
         workspace.setOnboardingCompleted(true);
 
         return workspaceRepository.save(workspace);
@@ -36,6 +37,13 @@ public class WorkspaceService {
         workspace.setBusinessName(request.getBusinessName());
         workspace.setCurrency(request.getCurrency());
         workspace.setDefaultPaymentTerms(request.getDefaultPaymentTerms());
+        workspace.setTimezone(request.getTimezone());
+        if (request.getReminderAutomationEnabled() != null) {
+            workspace.setReminderAutomationEnabled(request.getReminderAutomationEnabled());
+        }
+        if (request.getAddress() != null) {
+            workspace.setAddress(request.getAddress());
+        }
 
         return workspaceRepository.save(workspace);
     }

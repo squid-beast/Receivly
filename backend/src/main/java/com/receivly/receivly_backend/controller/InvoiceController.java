@@ -2,6 +2,7 @@ package com.receivly.receivly_backend.controller;
 
 import com.receivly.receivly_backend.dto.InvoiceRequest;
 import com.receivly.receivly_backend.dto.InvoiceResponse;
+import com.receivly.receivly_backend.dto.InvoiceUpdateRequest;
 import com.receivly.receivly_backend.entity.User;
 import com.receivly.receivly_backend.service.InvoiceService;
 import jakarta.validation.Valid;
@@ -38,6 +39,29 @@ public class InvoiceController {
             @AuthenticationPrincipal User user,
             @Valid @RequestBody InvoiceRequest request) {
         return ResponseEntity.ok(invoiceService.create(user.getWorkspace().getId(), request));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<InvoiceResponse> update(
+            @AuthenticationPrincipal User user,
+            @PathVariable UUID id,
+            @Valid @RequestBody InvoiceUpdateRequest request) {
+        return ResponseEntity.ok(invoiceService.update(user.getWorkspace().getId(), id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @AuthenticationPrincipal User user,
+            @PathVariable UUID id) {
+        invoiceService.delete(user.getWorkspace().getId(), id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/send")
+    public ResponseEntity<InvoiceResponse> sendToClient(
+            @AuthenticationPrincipal User user,
+            @PathVariable UUID id) {
+        return ResponseEntity.ok(invoiceService.sendToClient(user.getWorkspace().getId(), id));
     }
 
     @PatchMapping("/{id}/pay")

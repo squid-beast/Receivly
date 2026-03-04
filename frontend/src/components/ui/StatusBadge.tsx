@@ -1,6 +1,10 @@
 import { cn } from "@/lib/utils";
 
 const STATUS_MAP: Record<string, { label: string; className: string }> = {
+  DRAFT: {
+    label: "Draft",
+    className: "bg-muted text-muted-foreground ring-border dark:bg-muted/50 dark:text-muted-foreground dark:ring-border/50",
+  },
   SENT: {
     label: "Sent",
     className: "bg-blue-50 text-blue-700 ring-blue-600/20 dark:bg-blue-950/40 dark:text-blue-400 dark:ring-blue-400/20",
@@ -25,7 +29,7 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {
-  const config = STATUS_MAP[status] || STATUS_MAP.SENT;
+  const config = STATUS_MAP[status] || STATUS_MAP.PENDING;
 
   return (
     <span

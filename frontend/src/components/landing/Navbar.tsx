@@ -30,7 +30,7 @@ export function Navbar({ onNavChange }: { onNavChange?: (section: string) => voi
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled
-          ? "bg-white/80 dark:bg-background/80 backdrop-blur-xl border-b border-border shadow-sm"
+          ? "bg-background/80 backdrop-blur-xl border-b border-border shadow-sm"
           : "bg-transparent"
       )}
     >
@@ -111,7 +111,7 @@ export function Navbar({ onNavChange }: { onNavChange?: (section: string) => voi
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2, ease: "easeInOut" }}
-              className="fixed inset-x-0 top-16 z-50 overflow-hidden border-b border-border bg-white/95 backdrop-blur-xl dark:bg-background/95 md:hidden"
+              className="fixed inset-x-0 top-16 z-50 overflow-hidden border-b border-border bg-background/95 backdrop-blur-xl md:hidden"
             >
             <Container className="pb-6 pt-2">
               <div className="space-y-1">

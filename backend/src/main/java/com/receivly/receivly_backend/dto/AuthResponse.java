@@ -15,5 +15,6 @@ public class AuthResponse {
     private String email;
     private UUID workspaceId;
     private String businessName;
+    private String timezone;
     private boolean onboardingCompleted;
 }
