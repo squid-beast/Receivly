@@ -160,7 +160,6 @@ export function DashboardPage() {
         }
       }
 
-      const issueKey = issueDate.toISOString().slice(0, 10);
       if (inv.status === "PAID" && inv.paidAt) {
         const paidDate = new Date(inv.paidAt);
         paidDate.setHours(0, 0, 0, 0);
