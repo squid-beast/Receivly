@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
@@ -26,7 +27,6 @@ const plans: Array<{
   features: string[];
   cta: string;
   buttonVariant: "secondary" | "default" | "outline";
-  contactSales?: boolean;
 }> = [
   {
     id: "free",
@@ -69,9 +69,8 @@ const plans: Array<{
       "Exportable invoice records",
       "Multi-user access (future-ready)",
     ],
-    cta: "Contact sales",
+    cta: "Get started",
     buttonVariant: "outline",
-    contactSales: true,
   },
 ];
 
@@ -84,11 +83,12 @@ const cardVariants = {
   }),
 };
 
-const SUPPORT_EMAIL = "startwithleo@gmail.com";
+const hasOffer = (id: PlanId) => id === "pro" || id === "elite";
 
 export function Pricing() {
   const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>("monthly");
   const [selectedPlan, setSelectedPlan] = useState<PlanId>("pro");
+  const navigate = useNavigate();
 
   return (
     <section id="pricing" className={cn(SECTION_PADDING, SECTION_SCROLL_MARGIN)}>
@@ -147,12 +147,21 @@ export function Pricing() {
                 }
               }}
               className={cn(
-                "relative cursor-pointer rounded-2xl border border-border bg-background p-8 shadow-sm transition-all duration-300 hover:shadow-md hover:shadow-lg",
+                "relative cursor-pointer rounded-2xl border bg-background p-8 shadow-sm transition-all duration-300 hover:shadow-md hover:shadow-lg",
                 selectedPlan === plan.id
                   ? "border-2 border-foreground ring-2 ring-foreground/10"
                   : "border border-border"
               )}
             >
+              {hasOffer(plan.id) && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-foreground px-3.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-background shadow-sm">
+                    <Sparkles className="h-3 w-3" />
+                    Free for limited time
+                  </span>
+                </div>
+              )}
+
               <h3 className="text-lg font-semibold text-foreground">
                 {plan.name}
               </h3>
@@ -169,25 +178,18 @@ export function Pricing() {
                       </p>
                     )}
                   </>
-                ) : billingPeriod === "monthly" ? (
-                  <>
-                    <span className="font-display text-3xl font-bold text-foreground">
-                      ${plan.monthlyPrice}
-                    </span>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      per month
-                    </p>
-                  </>
                 ) : (
                   <>
-                    <span className="font-display text-3xl font-bold text-foreground">
-                      ${plan.yearlyPrice}
-                    </span>
+                    <div className="flex items-baseline gap-2.5">
+                      <span className="font-display text-3xl font-bold text-foreground">
+                        $0
+                      </span>
+                      <span className="text-base font-medium text-muted-foreground/40 line-through decoration-1">
+                        ${billingPeriod === "monthly" ? plan.monthlyPrice : plan.yearlyPrice}
+                      </span>
+                    </div>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      per year
-                    </p>
-                    <p className="mt-0.5 text-xs text-muted-foreground/80">
-                      Billed annually
+                      {billingPeriod === "monthly" ? "per month" : "per year"}
                     </p>
                   </>
                 )}
@@ -202,30 +204,20 @@ export function Pricing() {
                 ))}
               </ul>
 
-              {plan.contactSales ? (
-                <a
-                  href={`mailto:${SUPPORT_EMAIL}?subject=ELITE%20plan%20inquiry`}
-                  className={cn(
-                    "mt-8 flex w-full items-center justify-center rounded-lg border border-border bg-background px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                  )}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {plan.cta}
-                </a>
-              ) : (
-                <Button
-                  variant={plan.buttonVariant}
-                  className={cn(
-                    "mt-8 w-full",
-                    plan.buttonVariant === "default" &&
-                      "bg-foreground text-background hover:bg-foreground/90"
-                  )}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {plan.cta}
-                </Button>
-              )}
+              <Button
+                variant={plan.buttonVariant}
+                className={cn(
+                  "mt-8 w-full",
+                  plan.buttonVariant === "default" &&
+                    "bg-foreground text-background hover:bg-foreground/90"
+                )}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate("/signin");
+                }}
+              >
+                {plan.cta}
+              </Button>
             </motion.div>
           ))}
         </div>
