@@ -1,6 +1,7 @@
 package com.receivly.receivly_backend.controller;
 
 import com.receivly.receivly_backend.dto.AuthResponse;
+import com.receivly.receivly_backend.dto.GoogleAuthRequest;
 import com.receivly.receivly_backend.dto.SigninRequest;
 import com.receivly.receivly_backend.dto.SignupRequest;
 import com.receivly.receivly_backend.entity.User;
@@ -26,6 +27,11 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<AuthResponse> signin(@Valid @RequestBody SigninRequest request) {
         return ResponseEntity.ok(authService.signin(request));
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<AuthResponse> googleAuth(@Valid @RequestBody GoogleAuthRequest request) {
+        return ResponseEntity.ok(authService.googleAuth(request.getCredential()));
     }
 
     @GetMapping("/me")

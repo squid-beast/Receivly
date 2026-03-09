@@ -26,8 +26,12 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider = AuthProvider.LOCAL;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "workspace_id", nullable = false)
@@ -44,5 +48,9 @@ public class User {
 
     public enum Role {
         OWNER, MEMBER
+    }
+
+    public enum AuthProvider {
+        LOCAL, GOOGLE
     }
 }

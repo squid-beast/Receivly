@@ -29,6 +29,7 @@ interface AuthContextValue {
     password: string;
   }) => Promise<void>;
   signin: (data: { email: string; password: string }) => Promise<void>;
+  googleAuth: (credential: string) => Promise<void>;
   signout: () => void;
   updateUser: (partial: Partial<AuthUser>) => void;
 }
@@ -87,6 +88,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [persistAuth]
   );
 
+  const googleAuth = useCallback(
+    async (credential: string) => {
+      const res = await api.post("/auth/google", { credential });
+      const { token: authToken, ...authUser } = res.data;
+      persistAuth(authToken, authUser);
+    },
+    [persistAuth]
+  );
+
   const signout = useCallback(() => {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
@@ -105,7 +115,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, loading, signup, signin, signout, updateUser }}
+      value={{ user, token, loading, signup, signin, googleAuth, signout, updateUser }}
     >
       {children}
     </AuthContext.Provider>
