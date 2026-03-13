@@ -12,5 +12,4 @@ Disallow: /dashboard/help/
 Disallow: /dashboard/settings
 Disallow: /dashboard/settings/
 
-Sitemap: https://receivly.com/sitemap.xml
-
+Sitemap: https://www.getreceivly.com/sitemap.xml
