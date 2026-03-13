@@ -28,9 +28,24 @@ export function AcmeHero({
               ease: [0.21, 0.47, 0.32, 0.98] as const,
             }}
           >
-            Stop chasing payments.{" "}
-            <Highlight>Get paid on time.</Highlight>
+            Invoice Faster. Get Paid Sooner.{" "}
+            <Highlight>No Accounting Software Required.</Highlight>
           </motion.h1>
+
+          <motion.p
+            className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.5,
+              delay: 0.2,
+              ease: [0.21, 0.47, 0.32, 0.98] as const,
+            }}
+          >
+            Receivly is the focused invoicing platform for small businesses and freelancers.
+            Create professional invoices, track who has paid and who is overdue, and send
+            automated payment reminders — all from one clean dashboard.
+          </motion.p>
 
           <motion.div
             className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
@@ -48,7 +63,7 @@ export function AcmeHero({
                 size="lg"
                 className="min-h-[48px] sm:min-h-0"
               >
-                Start Free
+                Start Free — No Credit Card Required
               </Button>
             </Link>
           </motion.div>

@@ -29,21 +29,21 @@ const accentHoverClasses = [
 
 const keyFeatures = [
   {
-    title: "Invoicing",
+    title: "Create Invoices in 60 Seconds",
     summary:
-      "Create and send professional invoices in under a minute. Set payment terms (Net 7, 14, or 30) per customer and use a clean, branded layout.",
+      "Add your customer once. Generate invoices instantly with auto-numbering, auto-calculated due dates, and professional formatting. No templates to wrestle with.",
     icon: FileText,
   },
   {
-    title: "Reminders",
+    title: "See Every Invoice Status at a Glance",
     summary:
-      "Automatic follow-up emails based on due dates. Get a weekly summary of sent, overdue, and paid invoices. Pause or adjust anytime.",
+      "Your receivables dashboard shows every invoice organized as Sent, Overdue, or Paid. Know exactly how much money is outstanding at any moment.",
     icon: BellRing,
   },
   {
-    title: "Dashboard",
+    title: "Stop Chasing. Start Automating.",
     summary:
-      "See all invoices in one place with clear status: sent, overdue, and paid. Customer overview so you know who owes you at a glance.",
+      "Receivly sends payment reminders automatically at 7, 14, and 21 days after the due date. No more manual follow-up emails. No more forgotten invoices.",
     icon: LayoutDashboard,
   },
   {
