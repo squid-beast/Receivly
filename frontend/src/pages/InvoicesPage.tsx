@@ -39,12 +39,24 @@ import api from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn, formatDateInTimezone } from "@/lib/utils";
 import { CustomerAvatar } from "@/components/ui/customer-avatar";
+import { generateInvoicePdf } from "@/lib/generateInvoicePdf";
+
+interface InvoiceLineItem {
+  id: string;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  amount: number;
+}
 
 interface Invoice {
   id: string;
   invoiceNumber: string;
   description: string;
   amount: number;
+  subtotal: number;
+  taxRate: number;
+  discountAmount: number;
   currency: string;
   status: string;
   issueDate?: string;
@@ -55,6 +67,10 @@ interface Invoice {
   customerId: string;
   customerName: string;
   customerEmail: string;
+  customerAddress?: string | null;
+  workspaceAddress?: string | null;
+  workspaceBusinessName?: string | null;
+  lineItems: InvoiceLineItem[];
 }
 
 interface Customer {
@@ -262,7 +278,29 @@ export function InvoicesPage() {
     setSendingToClient(true);
     setDrawerError(null);
     try {
-      const res = await api.post(`/invoices/${id}/send`);
+      // Fetch full invoice data (includes lineItems, subtotal, etc.)
+      const fullRes = await api.get(`/invoices/${id}`);
+      const inv: Invoice = fullRes.data;
+
+      const pdfBase64 = await generateInvoicePdf({
+        invoiceNumber: inv.invoiceNumber,
+        issueDate: inv.issueDate ?? null,
+        dueDate: inv.dueDate,
+        currency: inv.currency,
+        subtotal: inv.subtotal,
+        taxRate: inv.taxRate,
+        discountAmount: inv.discountAmount,
+        amount: inv.amount,
+        customerName: inv.customerName,
+        customerEmail: inv.customerEmail,
+        customerAddress: inv.customerAddress ?? null,
+        workspaceBusinessName: inv.workspaceBusinessName ?? null,
+        workspaceAddress: inv.workspaceAddress ?? null,
+        lineItems: inv.lineItems,
+      });
+
+      const fileName = `Invoice_${inv.invoiceNumber}.pdf`;
+      const res = await api.post(`/invoices/${id}/send`, { pdfBase64, fileName });
       if (selectedInvoice?.id === id) setSelectedInvoice(res.data);
       await fetchData();
     } catch (err: unknown) {
