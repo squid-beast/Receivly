@@ -4,6 +4,7 @@ import com.receivly.receivly_backend.dto.InvoiceLineItemRequest;
 import com.receivly.receivly_backend.dto.InvoiceRequest;
 import com.receivly.receivly_backend.dto.InvoiceResponse;
 import com.receivly.receivly_backend.dto.InvoiceUpdateRequest;
+import com.receivly.receivly_backend.dto.SendInvoiceRequest;
 import com.receivly.receivly_backend.entity.Customer;
 import com.receivly.receivly_backend.entity.Invoice;
 import com.receivly.receivly_backend.entity.InvoiceLineItem;
@@ -24,6 +25,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,6 +38,7 @@ public class InvoiceService {
     private final CustomerRepository customerRepository;
     private final WorkspaceRepository workspaceRepository;
     private final PaymentRepository paymentRepository;
+    private final ResendEmailService resendEmailService;
 
     @Transactional(readOnly = true)
     public List<InvoiceResponse> list(UUID workspaceId) {
@@ -203,19 +206,34 @@ public class InvoiceService {
         invoiceRepository.delete(invoice);
     }
 
-    /**
-     * Email send stub: log that invoice was "sent" to customer and set sentAt.
-     * Real email integration can be added later.
-     */
     @Transactional
-    public InvoiceResponse sendToClient(UUID workspaceId, UUID invoiceId) {
+    public InvoiceResponse sendToClient(UUID workspaceId, UUID invoiceId, SendInvoiceRequest request) {
         Invoice invoice = invoiceRepository.findByIdAndWorkspaceId(invoiceId, workspaceId)
                 .orElseThrow(() -> new IllegalArgumentException("Invoice not found"));
         if (invoice.getStatus() == Invoice.Status.PAID) {
             throw new IllegalArgumentException("Cannot send a paid invoice");
         }
         String to = invoice.getCustomer().getEmail();
-        log.info("SEND INVOICE (stub): Invoice {} sent to client {}", invoice.getInvoiceNumber(), to);
+        if (to == null || to.isBlank()) {
+            throw new IllegalArgumentException("Customer has no email address");
+        }
+
+        byte[] pdfBytes;
+        try {
+            pdfBytes = Base64.getDecoder().decode(request.getPdfBase64());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid PDF data");
+        }
+        if (pdfBytes.length > 10 * 1024 * 1024) {
+            throw new IllegalArgumentException("PDF exceeds 10 MB size limit");
+        }
+
+        String fileName = (request.getFileName() != null && !request.getFileName().isBlank())
+                ? request.getFileName()
+                : "Invoice_" + invoice.getInvoiceNumber() + ".pdf";
+
+        resendEmailService.sendInvoice(to, invoice.getInvoiceNumber(), pdfBytes, fileName);
+
         if (invoice.getStatus() == Invoice.Status.DRAFT) {
             invoice.setStatus(Invoice.Status.SENT);
         }

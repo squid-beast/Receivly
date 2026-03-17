@@ -36,6 +36,7 @@ public class InvoiceResponse {
     private String customerEmail;
     private String customerAddress;
     private String workspaceAddress;
+    private String workspaceBusinessName;
     private List<InvoiceLineItemResponse> lineItems;
 
     public static InvoiceResponse from(Invoice inv) {
@@ -62,6 +63,7 @@ public class InvoiceResponse {
                 .customerEmail(inv.getCustomer().getEmail())
                 .customerAddress(inv.getCustomer().getAddress())
                 .workspaceAddress(inv.getWorkspace().getAddress())
+                .workspaceBusinessName(inv.getWorkspace().getBusinessName())
                 .lineItems(items)
                 .build();
     }

@@ -3,6 +3,7 @@ package com.receivly.receivly_backend.controller;
 import com.receivly.receivly_backend.dto.InvoiceRequest;
 import com.receivly.receivly_backend.dto.InvoiceResponse;
 import com.receivly.receivly_backend.dto.InvoiceUpdateRequest;
+import com.receivly.receivly_backend.dto.SendInvoiceRequest;
 import com.receivly.receivly_backend.entity.User;
 import com.receivly.receivly_backend.service.InvoiceService;
 import jakarta.validation.Valid;
@@ -60,8 +61,9 @@ public class InvoiceController {
     @PostMapping("/{id}/send")
     public ResponseEntity<InvoiceResponse> sendToClient(
             @AuthenticationPrincipal User user,
-            @PathVariable UUID id) {
-        return ResponseEntity.ok(invoiceService.sendToClient(user.getWorkspace().getId(), id));
+            @PathVariable UUID id,
+            @Valid @RequestBody SendInvoiceRequest request) {
+        return ResponseEntity.ok(invoiceService.sendToClient(user.getWorkspace().getId(), id, request));
     }
 
     @PatchMapping("/{id}/pay")
