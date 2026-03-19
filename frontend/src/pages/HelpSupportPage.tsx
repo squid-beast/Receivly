@@ -250,10 +250,10 @@ export function HelpSupportPage() {
         <p className="mt-1.5 text-sm text-muted-foreground">
           Reach out to us at{" "}
           <a
-            href="mailto:startwithleo@gmail.com"
+            href="mailto:founder@getreceivly.com"
             className="font-medium text-emerald-600 underline underline-offset-2 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
           >
-            startwithleo@gmail.com
+            founder@getreceivly.com
           </a>{" "}
           and we'll get back to you within 24 hours.
         </p>

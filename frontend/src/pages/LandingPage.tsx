@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AcmeHero } from "@/components/ui/acme-hero";
 import { Problem } from "@/components/landing/Problem";
 import { Features } from "@/components/landing/Features";
-import { Pricing } from "@/components/landing/Pricing";
+import Pricing from "@/components/ui/pricing-component";
 import { FAQ } from "@/components/landing/FAQ";
 import { Footer } from "@/components/landing/Footer";
 

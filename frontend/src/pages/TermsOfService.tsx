@@ -117,10 +117,10 @@ export function TermsOfService() {
               <p>
                 For questions about these Terms and Conditions, please contact us at{" "}
                 <a
-                  href="mailto:startwithleo@gmail.com"
+                  href="mailto:founder@getreceivly.com"
                   className="text-primary-600 underline underline-offset-4 hover:text-primary-700"
                 >
-                  startwithleo@gmail.com
+                  founder@getreceivly.com
                 </a>
                 .
               </p>

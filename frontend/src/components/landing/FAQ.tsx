@@ -68,10 +68,10 @@ export function FAQ() {
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               If you can't find what you're looking for,{" "}
               <a
-                href="mailto:startwithleo@gmail.com"
+                href="mailto:founder@getreceivly.com"
                 className="font-medium text-primary-600 underline underline-offset-4 hover:text-primary-700"
               >
-                startwithleo@gmail.com
+                founder@getreceivly.com
               </a>
               .
             </p>
