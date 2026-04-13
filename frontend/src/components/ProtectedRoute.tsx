@@ -1,7 +1,12 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
-export function ProtectedRoute({ children }: { children: React.ReactNode }) {
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  skipOnboardingCheck?: boolean;
+}
+
+export function ProtectedRoute({ children, skipOnboardingCheck }: ProtectedRouteProps) {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -16,7 +21,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     return <Navigate to="/signin" replace />;
   }
 
-  if (!user.onboardingCompleted) {
+  if (!skipOnboardingCheck && !user.onboardingCompleted) {
     return <Navigate to="/onboarding" replace />;
   }
 

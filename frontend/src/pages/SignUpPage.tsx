@@ -11,6 +11,38 @@ import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
 
+const KNOWN_ERRORS = new Set([
+  "Registration failed. Please try again.",
+  "Google sign-up failed. Please try again.",
+  "Google sign-up was cancelled or failed.",
+  "Too many requests. Please try again later.",
+]);
+
+function sanitizeError(err: unknown, fallback: string): string {
+  const msg =
+    (err as { response?: { data?: { error?: string } } })?.response?.data
+      ?.error;
+  if (msg && KNOWN_ERRORS.has(msg)) return msg;
+  if (msg && msg.startsWith("password:")) return msg;
+  return fallback;
+}
+
+function getPasswordStrength(pw: string): { label: string; color: string; width: string } {
+  if (pw.length === 0) return { label: "", color: "", width: "0%" };
+  let score = 0;
+  if (pw.length >= 8) score++;
+  if (pw.length >= 12) score++;
+  if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
+  if (/\d/.test(pw)) score++;
+  if (/[^a-zA-Z0-9]/.test(pw)) score++;
+
+  if (score <= 1) return { label: "Weak", color: "bg-red-500", width: "20%" };
+  if (score <= 2) return { label: "Fair", color: "bg-orange-500", width: "40%" };
+  if (score <= 3) return { label: "Good", color: "bg-yellow-500", width: "60%" };
+  if (score <= 4) return { label: "Strong", color: "bg-green-500", width: "80%" };
+  return { label: "Very Strong", color: "bg-emerald-500", width: "100%" };
+}
+
 export function SignUpPage() {
   const { signup, googleAuth } = useAuth();
   const navigate = useNavigate();
@@ -25,6 +57,14 @@ export function SignUpPage() {
     password: "",
   });
 
+  const passwordStrength = getPasswordStrength(form.password);
+
+  const passwordValid =
+    form.password.length >= 8 &&
+    /[a-z]/.test(form.password) &&
+    /[A-Z]/.test(form.password) &&
+    /\d/.test(form.password);
+
   const googleLogin = useGoogleLogin({
     flow: "implicit",
     onSuccess: async (tokenResponse) => {
@@ -32,16 +72,12 @@ export function SignUpPage() {
       setGoogleLoading(true);
       try {
         await googleAuth(tokenResponse.access_token);
-
-        const user = JSON.parse(
+        const storedUser = JSON.parse(
           localStorage.getItem("receivly-user") || "{}"
         );
-        navigate(user.onboardingCompleted ? "/dashboard" : "/onboarding");
+        navigate(storedUser.onboardingCompleted ? "/dashboard" : "/onboarding");
       } catch (err: unknown) {
-        const msg =
-          (err as { response?: { data?: { error?: string } } })?.response?.data
-            ?.error || "Google sign-up failed. Please try again.";
-        setError(msg);
+        setError(sanitizeError(err, "Google sign-up failed. Please try again."));
       } finally {
         setGoogleLoading(false);
       }
@@ -53,16 +89,17 @@ export function SignUpPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!passwordValid) {
+      setError("Password must be at least 8 characters with uppercase, lowercase, and a digit.");
+      return;
+    }
     setError(null);
     setLoading(true);
     try {
       await signup(form);
       navigate("/onboarding");
     } catch (err: unknown) {
-      const msg =
-        (err as { response?: { data?: { error?: string } } })?.response?.data
-          ?.error || "Something went wrong. Please try again.";
-      setError(msg);
+      setError(sanitizeError(err, "Something went wrong. Please try again."));
     } finally {
       setLoading(false);
     }
@@ -150,7 +187,7 @@ export function SignUpPage() {
                   />
                 </svg>
               )}
-              <span>{googleLoading ? "Signing up…" : "Sign up with Google"}</span>
+              <span>{googleLoading ? "Signing up\u2026" : "Sign up with Google"}</span>
             </Button>
 
             <div className="mt-6 flex items-center gap-3">
@@ -173,6 +210,8 @@ export function SignUpPage() {
                 <Input
                   id="fullName"
                   placeholder="Jane Smith"
+                  autoComplete="name"
+                  maxLength={100}
                   value={form.fullName}
                   onChange={(e) => updateField("fullName", e.target.value)}
                   required
@@ -184,6 +223,8 @@ export function SignUpPage() {
                 <Input
                   id="businessName"
                   placeholder="Acme Inc."
+                  autoComplete="organization"
+                  maxLength={200}
                   value={form.businessName}
                   onChange={(e) => updateField("businessName", e.target.value)}
                   required
@@ -196,6 +237,8 @@ export function SignUpPage() {
                   id="email"
                   type="email"
                   placeholder="you@example.com"
+                  autoComplete="email"
+                  maxLength={255}
                   value={form.email}
                   onChange={(e) => updateField("email", e.target.value)}
                   required
@@ -209,10 +252,12 @@ export function SignUpPage() {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="At least 8 characters"
+                    autoComplete="new-password"
                     value={form.password}
                     onChange={(e) => updateField("password", e.target.value)}
                     required
                     minLength={8}
+                    maxLength={128}
                     className="pr-10"
                   />
                   <button
@@ -228,19 +273,33 @@ export function SignUpPage() {
                     )}
                   </button>
                 </div>
+                {form.password.length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+                      <div
+                        className={cn("h-full rounded-full transition-all", passwordStrength.color)}
+                        style={{ width: passwordStrength.width }}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {passwordStrength.label}
+                      {!passwordValid && " — needs uppercase, lowercase & digit"}
+                    </p>
+                  </div>
+                )}
               </div>
 
               <Button
                 type="submit"
-                disabled={loading}
-                className={cn("w-full", loading && "opacity-70")}
+                disabled={loading || !passwordValid}
+                className={cn("w-full", (loading || !passwordValid) && "opacity-70")}
               >
                 {loading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
                   <ArrowRight className="mr-2 h-4 w-4" />
                 )}
-                {loading ? "Creating account…" : "Create account"}
+                {loading ? "Creating account\u2026" : "Create account"}
               </Button>
             </form>
 

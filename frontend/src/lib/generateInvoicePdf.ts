@@ -26,6 +26,16 @@ export interface InvoiceForPdf {
   lineItems: InvoiceLineItem[];
 }
 
+function escapeHtml(s: string | null | undefined): string {
+  if (!s) return "";
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function fmt(amount: number, currency: string): string {
   return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amount);
 }
@@ -36,7 +46,7 @@ function buildInvoiceHtml(inv: InvoiceForPdf): string {
   const lineItemRows = inv.lineItems.length > 0
     ? inv.lineItems.map((item) => `
         <tr>
-          <td style="padding:10px 8px;border-bottom:1px solid #f3f4f6;font-size:13px;color:#111827;">${item.description}</td>
+          <td style="padding:10px 8px;border-bottom:1px solid #f3f4f6;font-size:13px;color:#111827;">${escapeHtml(item.description)}</td>
           <td style="padding:10px 8px;border-bottom:1px solid #f3f4f6;font-size:13px;color:#374151;text-align:right;">${item.quantity}</td>
           <td style="padding:10px 8px;border-bottom:1px solid #f3f4f6;font-size:13px;color:#374151;text-align:right;">${fmt(item.unitPrice, inv.currency)}</td>
           <td style="padding:10px 8px;border-bottom:1px solid #f3f4f6;font-size:13px;font-weight:600;color:#111827;text-align:right;">${fmt(item.amount, inv.currency)}</td>
@@ -54,7 +64,7 @@ function buildInvoiceHtml(inv: InvoiceForPdf): string {
         </div>
         <div style="text-align:right;">
           <div style="font-size:28px;font-weight:700;color:#111827;letter-spacing:-0.5px;">INVOICE</div>
-          <div style="font-size:14px;color:#6b7280;margin-top:4px;">${inv.invoiceNumber}</div>
+          <div style="font-size:14px;color:#6b7280;margin-top:4px;">${escapeHtml(inv.invoiceNumber)}</div>
         </div>
       </div>
 
@@ -62,19 +72,19 @@ function buildInvoiceHtml(inv: InvoiceForPdf): string {
       <div style="display:flex;gap:48px;margin-bottom:40px;">
         <div style="flex:1;">
           <div style="font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">From</div>
-          <div style="font-size:14px;font-weight:600;color:#111827;">${inv.workspaceBusinessName ?? "Your Business"}</div>
-          ${inv.workspaceAddress ? `<div style="font-size:13px;color:#6b7280;white-space:pre-wrap;margin-top:4px;">${inv.workspaceAddress}</div>` : ""}
+          <div style="font-size:14px;font-weight:600;color:#111827;">${escapeHtml(inv.workspaceBusinessName) || "Your Business"}</div>
+          ${inv.workspaceAddress ? `<div style="font-size:13px;color:#6b7280;white-space:pre-wrap;margin-top:4px;">${escapeHtml(inv.workspaceAddress)}</div>` : ""}
         </div>
         <div style="flex:1;">
           <div style="font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Bill To</div>
-          <div style="font-size:14px;font-weight:600;color:#111827;">${inv.customerName}</div>
-          <div style="font-size:13px;color:#6b7280;margin-top:2px;">${inv.customerEmail}</div>
-          ${inv.customerAddress ? `<div style="font-size:13px;color:#6b7280;white-space:pre-wrap;margin-top:2px;">${inv.customerAddress}</div>` : ""}
+          <div style="font-size:14px;font-weight:600;color:#111827;">${escapeHtml(inv.customerName)}</div>
+          <div style="font-size:13px;color:#6b7280;margin-top:2px;">${escapeHtml(inv.customerEmail)}</div>
+          ${inv.customerAddress ? `<div style="font-size:13px;color:#6b7280;white-space:pre-wrap;margin-top:2px;">${escapeHtml(inv.customerAddress)}</div>` : ""}
         </div>
         <div style="flex:1;text-align:right;">
           <div style="font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Dates</div>
-          ${inv.issueDate ? `<div style="font-size:13px;color:#374151;margin-bottom:4px;"><span style="color:#9ca3af;">Issued:</span> ${inv.issueDate}</div>` : ""}
-          <div style="font-size:13px;color:#374151;"><span style="color:#9ca3af;">Due:</span> ${inv.dueDate}</div>
+          ${inv.issueDate ? `<div style="font-size:13px;color:#374151;margin-bottom:4px;"><span style="color:#9ca3af;">Issued:</span> ${escapeHtml(inv.issueDate)}</div>` : ""}
+          <div style="font-size:13px;color:#374151;"><span style="color:#9ca3af;">Due:</span> ${escapeHtml(inv.dueDate)}</div>
         </div>
       </div>
 

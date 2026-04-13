@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.Base64;
 import java.util.List;
@@ -34,7 +35,7 @@ public class ResendEmailService {
         Map<String, Object> body = Map.of(
                 "from", fromEmail,
                 "to", List.of(toEmail),
-                "subject", "Invoice " + invoiceNumber,
+                "subject", "Invoice " + HtmlUtils.htmlEscape(invoiceNumber),
                 "html", buildEmailHtml(invoiceNumber),
                 "attachments", List.of(Map.of(
                         "filename", fileName,
@@ -57,6 +58,7 @@ public class ResendEmailService {
     }
 
     private String buildEmailHtml(String invoiceNumber) {
+        String escaped = HtmlUtils.htmlEscape(invoiceNumber);
         return """
                 <div style="font-family:Inter,Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;padding:40px 32px;">
                   <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Invoice %s</h1>
@@ -67,6 +69,6 @@ public class ResendEmailService {
                     Sent via <a href="https://getreceivly.com" style="color:#059669;text-decoration:none;">Receivly</a>
                   </p>
                 </div>
-                """.formatted(invoiceNumber);
+                """.formatted(escaped);
     }
 }

@@ -11,6 +11,22 @@ import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.svg";
 
+const KNOWN_ERRORS = new Set([
+  "Invalid email or password",
+  "Google sign-in failed. Please try again.",
+  "Google sign-in was cancelled or failed.",
+  "Token expired or invalid",
+  "Too many requests. Please try again later.",
+]);
+
+function sanitizeError(err: unknown, fallback: string): string {
+  const msg =
+    (err as { response?: { data?: { error?: string } } })?.response?.data
+      ?.error;
+  if (msg && KNOWN_ERRORS.has(msg)) return msg;
+  return fallback;
+}
+
 export function SignInPage() {
   const { signin, googleAuth } = useAuth();
   const navigate = useNavigate();
@@ -27,15 +43,12 @@ export function SignInPage() {
       setGoogleLoading(true);
       try {
         await googleAuth(tokenResponse.access_token);
-        const user = JSON.parse(
+        const storedUser = JSON.parse(
           localStorage.getItem("receivly-user") || "{}"
         );
-        navigate(user.onboardingCompleted ? "/dashboard" : "/onboarding");
+        navigate(storedUser.onboardingCompleted ? "/dashboard" : "/onboarding");
       } catch (err: unknown) {
-        const msg =
-          (err as { response?: { data?: { error?: string } } })?.response?.data
-            ?.error || "Google sign-in failed. Please try again.";
-        setError(msg);
+        setError(sanitizeError(err, "Google sign-in failed. Please try again."));
       } finally {
         setGoogleLoading(false);
       }
@@ -53,10 +66,7 @@ export function SignInPage() {
       await signin(form);
       navigate("/dashboard");
     } catch (err: unknown) {
-      const msg =
-        (err as { response?: { data?: { error?: string } } })?.response?.data
-          ?.error || "Invalid email or password.";
-      setError(msg);
+      setError(sanitizeError(err, "Invalid email or password."));
     } finally {
       setLoading(false);
     }
@@ -141,7 +151,7 @@ export function SignInPage() {
                   />
                 </svg>
               )}
-              <span>{googleLoading ? "Signing in…" : "Login with Google"}</span>
+              <span>{googleLoading ? "Signing in\u2026" : "Login with Google"}</span>
             </Button>
 
             <div className="mt-6 flex items-center gap-3">
@@ -165,6 +175,7 @@ export function SignInPage() {
                   id="email"
                   type="email"
                   placeholder="you@example.com"
+                  autoComplete="email"
                   value={form.email}
                   onChange={(e) =>
                     setForm((prev) => ({ ...prev, email: e.target.value }))
@@ -180,6 +191,7 @@ export function SignInPage() {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Your password"
+                    autoComplete="current-password"
                     value={form.password}
                     onChange={(e) =>
                       setForm((prev) => ({ ...prev, password: e.target.value }))
@@ -212,7 +224,7 @@ export function SignInPage() {
                 ) : (
                   <ArrowRight className="mr-2 h-4 w-4" />
                 )}
-                {loading ? "Signing in…" : "Login"}
+                {loading ? "Signing in\u2026" : "Login"}
               </Button>
             </form>
           </div>

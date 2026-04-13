@@ -228,9 +228,12 @@ public class InvoiceService {
             throw new IllegalArgumentException("PDF exceeds 10 MB size limit");
         }
 
-        String fileName = (request.getFileName() != null && !request.getFileName().isBlank())
-                ? request.getFileName()
-                : "Invoice_" + invoice.getInvoiceNumber() + ".pdf";
+        String fileName = "Invoice_" + invoice.getInvoiceNumber() + ".pdf";
+        if (request.getFileName() != null && !request.getFileName().isBlank()) {
+            String sanitized = request.getFileName().replaceAll("[^a-zA-Z0-9._\\- ]", "");
+            if (sanitized.length() > 255) sanitized = sanitized.substring(0, 255);
+            if (!sanitized.isBlank()) fileName = sanitized;
+        }
 
         resendEmailService.sendInvoice(to, invoice.getInvoiceNumber(), pdfBytes, fileName);
 

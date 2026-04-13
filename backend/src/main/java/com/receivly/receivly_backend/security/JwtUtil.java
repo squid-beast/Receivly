@@ -3,6 +3,7 @@ package com.receivly.receivly_backend.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +17,27 @@ public class JwtUtil {
 
     private final SecretKey key;
     private final long expirationMs;
+    private final String rawSecret;
 
     public JwtUtil(
             @Value("${app.jwt.secret}") String secret,
             @Value("${app.jwt.expiration-ms}") long expirationMs) {
+        this.rawSecret = secret;
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.expirationMs = expirationMs;
+    }
+
+    @PostConstruct
+    public void validateSecret() {
+        if (rawSecret.startsWith("this-is-a-local-dev-secret")
+                || rawSecret.startsWith("CHANGE_ME")) {
+            String profile = System.getProperty("spring.profiles.active", "");
+            if (profile.contains("prod")) {
+                throw new IllegalStateException(
+                        "JWT_SECRET must be set to a secure value in production. "
+                                + "Generate one with: openssl rand -base64 32");
+            }
+        }
     }
 
     public String generateToken(UUID userId, UUID workspaceId, String email) {

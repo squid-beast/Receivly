@@ -14,14 +14,12 @@ public class InvoiceRequest {
     @NotNull
     private UUID customerId;
 
-    /** Legacy: single description when no line items */
+    @Size(max = 500)
     private String description;
 
-    /** Legacy: single amount when no line items */
     @DecimalMin("0")
     private BigDecimal amount;
 
-    /** Line items (description, quantity, unitPrice). When present, subtotal/total are computed. */
     @Valid
     private List<InvoiceLineItemRequest> lineItems;
 
@@ -32,9 +30,7 @@ public class InvoiceRequest {
     @DecimalMin("0")
     private BigDecimal discountAmount = BigDecimal.ZERO;
 
-    /** Issue date; default today if not set */
     private LocalDate issueDate;
 
-    /** When true, invoice is saved as DRAFT; otherwise SENT */
     private Boolean draft;
 }

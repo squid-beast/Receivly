@@ -1,6 +1,7 @@
 package com.receivly.receivly_backend.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -11,8 +12,10 @@ public class OnboardingRequest {
     private String currency;
 
     @NotBlank
+    @Pattern(regexp = "^(NET_7|NET_14|NET_30|NET_60)$", message = "Invalid payment terms")
     private String defaultPaymentTerms;
 
     @NotBlank
+    @Size(max = 100)
     private String timezone;
 }

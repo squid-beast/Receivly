@@ -26,10 +26,12 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    private final RestTemplate googleRestTemplate = new RestTemplate();
+
     @Transactional
     public AuthResponse signup(SignupRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email already in use");
+            throw new IllegalArgumentException("Registration failed. Please try again.");
         }
 
         Workspace workspace = Workspace.builder()
@@ -87,7 +89,6 @@ public class AuthService {
     public AuthResponse me(User user) {
         Workspace workspace = user.getWorkspace();
         return AuthResponse.builder()
-                .token(null)
                 .userId(user.getId())
                 .fullName(user.getFullName())
                 .email(user.getEmail())
@@ -105,6 +106,11 @@ public class AuthService {
         String email = (String) googleUser.get("email");
         if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Google account has no email");
+        }
+
+        Boolean emailVerified = (Boolean) googleUser.get("email_verified");
+        if (!Boolean.TRUE.equals(emailVerified)) {
+            throw new IllegalArgumentException("Google email is not verified");
         }
 
         String name = (String) googleUser.get("name");
@@ -162,9 +168,8 @@ public class AuthService {
     @SuppressWarnings("unchecked")
     private Map<String, Object> fetchGoogleUserInfo(String accessToken) {
         try {
-            RestTemplate restTemplate = new RestTemplate();
             String url = "https://www.googleapis.com/oauth2/v3/userinfo?access_token=" + accessToken;
-            Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+            Map<String, Object> response = googleRestTemplate.getForObject(url, Map.class);
             if (response == null || !response.containsKey("email")) {
                 throw new IllegalArgumentException("Invalid Google access token");
             }
@@ -172,7 +177,7 @@ public class AuthService {
         } catch (IllegalArgumentException e) {
             throw e;
         } catch (Exception e) {
-            throw new IllegalArgumentException("Failed to verify Google access token", e);
+            throw new IllegalArgumentException("Failed to verify Google access token");
         }
     }
 }
