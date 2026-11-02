@@ -121,8 +121,19 @@ export function Footer() {
         </div>
 
         <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-border pt-4 pb-[env(safe-area-inset-bottom)] sm:flex-row sm:pb-0">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-center text-xs text-muted-foreground sm:text-left">
             © {year} Receivly. All rights reserved.
+            <span className="block sm:inline">
+              <span className="hidden sm:inline"> · </span>A{" "}
+              <a
+                href="https://paypilotlabs.com/"
+                rel="noopener"
+                className="underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                PayPilotLabs
+              </a>{" "}
+              product
+            </span>
           </p>
           <nav className="flex flex-wrap justify-center gap-3 sm:gap-4">
             <Link
